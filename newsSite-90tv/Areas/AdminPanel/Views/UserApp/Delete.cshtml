@@ -1,0 +1,43 @@
+﻿@model UserApp
+
+@{
+    Layout = null;
+}
+
+<form asp-controller="userapp" asp-action="Delete" method="post">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">حذف کاربر اپلیکیشن</h4>
+    </div>
+        
+    <div class="modal-body form-horizontal">
+
+        <div class="text-center">
+
+            @if (!string.IsNullOrEmpty(Model.image))
+
+            {
+                <img src="~/upload/userAppimage/normalimage/@Model.image" width="100px" height="100px" class="img-circle" alt="@Model.firstName @Model.lastName" />
+            }
+            else
+            {
+
+                <img src="~/upload/userAppimage/normalimage/category.png" width="100px"  class="img-circle" height="100px" alt="@Model.firstName @Model.lastName" />
+            }
+
+        </div>
+        <br />
+      
+        آیا از حذف کاربر <strong>@Model.firstName  @Model.lastName</strong> مطمئن هستید؟
+
+    </div>
+
+
+    <div class="modal-footer" style="text-align:left;">
+        <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+        <button class="btn btn-danger" type="submit">
+            حذف
+        </button>
+    </div>
+
+</form>

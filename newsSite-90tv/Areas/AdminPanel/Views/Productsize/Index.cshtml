@@ -1,0 +1,155 @@
+﻿@model IEnumerable<newsSite90tv.Models.Size>
+
+@using newsSite90tv.PublicClass
+
+@using newsSite90tv.Models.UnitOfWork
+
+@inject IUnitOfWork _context
+
+@{
+    ViewData["Title"] = "مدیریت سایز بندی محصول ";
+
+    int row = 1;
+}
+
+<style>
+    #idximg {
+        height: 100%;
+        width: 100%;
+    }
+</style>
+
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-@TempData["type"]">
+        <span class="close" data-dismiss="alert">&times;</span>
+
+        @TempData["message"]
+
+    </div>
+}
+
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="panel panel-primary col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+
+        <div class="panel-body">
+            <div>
+                <a class="btn btn-primary" asp-controller="productsize" asp-action="Create">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    افزودن
+                </a>
+            </div>
+        </div>
+
+        <hr style="height:1px; background-color:gray;" />
+
+        <div class="box box-body table-responsive no-padding">
+
+            <table class="table table-responsive text-center">
+                <thead>
+                    <tr style="font-size:15px; font-weight:600;">
+                        <td>ردیف</td>
+                        <td>@Html.DisplayNameFor(model => model.name)</td>
+                       
+
+                        <td>عملیات</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                      
+                        <tr>
+                            <td>
+                                @(row++)
+
+                            </td>
+
+
+                            <td>
+                                @item.name
+
+                            </td>
+
+
+                         
+
+
+
+                            <td>
+
+                                <a class="btn btn-info" asp-controller="productsize" asp-action="Details" asp-route-id="@item.Id">
+                                    <i class="glyphicon glyphicon-info-sign"></i>
+                                    جزییات
+                                </a>
+
+
+                                <a class="btn btn-primary" asp-controller="productsize" asp-action="Edit" asp-route-id="@item.Id">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                    ویرایش
+                                </a>
+
+                                <a class="btn btn-danger" asp-controller="productsize" asp-action="Delete"
+                                   asp-route-id="@item.Id " data-toggle="modal" data-target="#modal-action-size">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                    حذف
+                                </a>
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+
+@* Paging *@
+@if (ViewBag.PageCount > 1)
+{
+    <div class="row text-center">
+        <nav>
+            <ul class="pagination">
+                @if ((int)ViewBag.PageID > 1)
+                {
+                    @* Previous *@
+                    <li>
+                        <a asp-controller="productsize" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID - 1)">
+                            <span>&laquo;</span>
+                        </a>
+                    </li>
+                }
+                @for (int i = 1; i <= (ViewBag.PageCount); i++)
+                {
+                    <li class="@(((int)ViewBag.PageID==i)?" active":"")">
+                        <a asp-controller="productsize" asp-action="Index" asp-route-page="@i">
+                            @i
+                            <span class="sr-only"></span>
+                        </a>
+                    </li>
+                }
+                @if ((int)ViewBag.PageID <= (int)ViewBag.PageCount - 1)
+                {
+                    @* Next *@
+                    <li>
+                        <a asp-controller="productsize" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID + 1)">
+                            <span>&raquo;</span>
+                        </a>
+                    </li>
+
+                }
+            </ul>
+        </nav>
+    </div>
+
+}
+
+
+
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-size", Size = ModalSize.Medium })
+

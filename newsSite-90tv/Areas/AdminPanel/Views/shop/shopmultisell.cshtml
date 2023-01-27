@@ -1,0 +1,132 @@
+﻿@model IEnumerable<ProductSeller>
+
+@using newsSite90tv.Models.UnitOfWork
+
+
+@using newsSite90tv.PublicClass
+
+@{
+    ViewData["title"] = "لیست محصولات چند فروشندگی فروشگاه";
+    int row = 1;
+}
+
+@inject IUnitOfWork _conx
+
+
+<p class="text-info">
+    لیست محصولات چند فروشندگی فروشگاه
+</p>
+
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="panel panel-primary col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+
+        <div class="panel-body">
+
+        </div>
+
+        <hr style="height:1px; background-color:gray;" />
+
+        <div class="box box-body table-responsive no-padding">
+
+            <table class="table table-responsive text-center">
+                <thead>
+                    <tr style="font-size:15px; font-weight:600;">
+                        <td>ردیف</td>
+                        <td>@Html.DisplayNameFor(model => model.Tbl_Product.title)</td>
+                        <td>@Html.DisplayNameFor(model => model.Tbl_Product.image)</td>
+                        <td>@Html.DisplayNameFor(model => model.dateShamsi)</td>
+                        <td>@Html.DisplayNameFor(model => model.status)</td>
+                        <td>عملیات</td>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        @foreach (var item in Model)
+                        {
+
+                            <tr>
+                                <td>@(row++)</td>
+                                <td>@item.Tbl_Product.title</td>
+
+                                <td>
+                                    @if (!string.IsNullOrEmpty(@item.Tbl_Product.title))
+                                    {
+                                        <img src="~/upload/products/thumbnailimage/@item.Tbl_Product.image" class="img-thumbnail profile-user-img" />
+
+                                    }
+                                    else
+                                    {
+                                        <img src="~/upload/products/normalimage/productdef.png" class="img-thumbnail profile-user-img" />
+
+                                    }
+                                </td>
+
+                                <td>@item.dateShamsi</td>
+                                <td>@item.status.checkStatus()</td>
+
+
+
+                                <td>
+                                    <a class="btn btn-sm btn-info" asp-controller="productseller" asp-action="Details" asp-route-id="@item.Id"
+                                            data-target="#modal-action-all" data-toggle="modal">
+                                        <i class="glyphicon glyphicon-info-sign"></i>
+                                        جزییات
+                                    </a>
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+
+@* Paging *@
+@if (ViewBag.PageCount > 1)
+{
+    <div class="row text-center">
+        <nav>
+            <ul class="pagination">
+                @if ((int)ViewBag.PageID > 1)
+                {
+                    @* Previous *@
+                    <li>
+                        <a asp-controller="shop" asp-action="shopProduct" asp-route-id="@ViewBag.shopid" asp-route-Page="@((int)ViewBag.PageID - 1)">
+                            <span>&laquo;</span>
+                        </a>
+                    </li>
+                }
+                @for (int i = 1; i <= (ViewBag.PageCount); i++)
+                {
+                    <li class="@(((int)ViewBag.PageID==i)?" active":"")">
+                        <a asp-controller="shop" asp-action="shopProduct" asp-route-id="@ViewBag.shopid" asp-route-page="@i">
+                            @i
+                            <span class="sr-only"></span>
+                        </a>
+                    </li>
+                }
+                @if ((int)ViewBag.PageID <= (int)ViewBag.PageCount - 1)
+                {
+                    @* Next *@
+                    <li>
+                        <a asp-controller="shop" asp-action="shopProduct" asp-route-id="@ViewBag.shopid" asp-route-Page="@((int)ViewBag.PageID + 1)">
+                            <span>&raquo;</span>
+                        </a>
+                    </li>
+
+                }
+            </ul>
+        </nav>
+    </div>
+
+}
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-all", Size = ModalSize.Medium })

@@ -1,0 +1,180 @@
+﻿@model IEnumerable<ContactUs>
+
+@using newsSite90tv.PublicClass
+
+@{
+    ViewData["Title"] = "ارتباط با ما";
+
+    int row = 1;
+}
+
+
+
+<style>
+    #idximg {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+    }
+
+    .circleInput {
+        border-radius: 3px;
+    }
+</style>
+
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-@TempData["type"]">
+        <span class="close" data-dismiss="alert">
+            &times;
+        </span>
+
+        @TempData["message"]
+
+    </div>
+}
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="panel panel-primary col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+
+
+        <hr style="height:1px; background-color:gray;" />
+
+        <div class="box box-body table-responsive no-padding">
+
+            <table class="table table-responsive text-center">
+                <thead>
+                    <tr style="font-size:15px; font-weight:600;">
+                        <td>ردیف</td>
+                        <td>@Html.DisplayNameFor(model => model.appuser_id)</td>
+                        <td>@Html.DisplayNameFor(model => model.title)</td>
+                        <td>@Html.DisplayNameFor(model => model.status)</td>
+                        <td>عملیات</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        @foreach (var item in Model)
+                        {
+
+                            <tr>
+                                <td>
+                                    @(row++)
+                                </td>
+
+                                <td>
+                                    @item.Tbl_UserApp.firstName @item.Tbl_UserApp.lastName
+                                </td>
+
+
+                                <td>
+                                    @item.title
+                                </td>
+
+                                <td>
+                                    @if (item.status == contactstate.read.ToByte())
+                                    {
+                                        <b class="text-success">
+                                            بررسی شد
+                                        </b>
+                                    }
+                                    else
+                                    {
+                                        <b class="text-info">
+                                            بررسی نشده
+                                        </b>
+                                    }
+
+                                </td>
+
+                                <td>
+
+
+                                    <a class="btn btn-info" asp-controller="contact" asp-action="Details" asp-route-Id="@item.Id" data-toggle="modal" data-target="#modal-action-details">
+                                        <span class="glyphicon glyphicon-info-sign"></span>
+                                        جزییات
+                                    </a>
+
+
+
+                                    <a class="btn btn-danger" asp-controller="contact" asp-action="Delete" asp-route-Id="@item.Id" data-toggle="modal" data-target="#modal-action-delete">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                        حذف
+                                    </a>
+
+
+                                    @if (item.status == contactstate.unread.ToByte())
+                                    {
+                                        <a class="btn btn-primary" asp-controller="contact" asp-action="setRead" asp-route-Id="@item.Id" >
+                                           
+                                            بررسی شد
+                                        </a>
+                                    }
+
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+@* Paging *@
+@if (ViewBag.PageCount > 1)
+{
+    <div class="row text-center">
+        <nav>
+            <ul class="pagination">
+                @if ((int)ViewBag.PageID > 1)
+                {
+                    @* Previous *@
+                    <li>
+                        <a asp-controller="contact" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID - 1)">
+                            <span>&laquo;</span>
+                        </a>
+                    </li>
+                }
+                @for (int i = 1; i <= (ViewBag.PageCount); i++)
+                {
+                    <li class="@(((int)ViewBag.PageID==i)?" active":"")">
+                        <a asp-controller="contact" asp-action="Index" asp-route-page="@i">
+                            @i
+                            <span class="sr-only"></span>
+                        </a>
+                    </li>
+                }
+                @if ((int)ViewBag.PageID <= (int)ViewBag.PageCount - 1)
+                {
+                    @* Next *@
+                    <li>
+                        <a asp-controller="contact" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID + 1)">
+                            <span>&raquo;</span>
+                        </a>
+                    </li>
+
+                }
+            </ul>
+        </nav>
+    </div>
+
+}
+
+
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-details", Size = ModalSize.Medium })
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-delete", Size = ModalSize.Medium })
+
+
+

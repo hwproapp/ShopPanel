@@ -1,0 +1,265 @@
+﻿@model newsSite90tv.Models.ViewModels.ProductSizeEditViewModel
+
+
+@{
+    ViewData["Title"] = "ویرایش سایز بندی محصول";
+
+}
+
+
+<style>
+    .circleInput {
+        border-radius: 3px;
+    }
+
+    .scroll {
+        overflow: scroll;
+        height: 250px;
+    }
+
+</style>
+
+
+
+@if (ViewBag.message != null)
+{
+    <div class="alert alert-@ViewBag.type">
+        <span class="close" data-dismiss="alert">&times;</span>
+        @ViewBag.message
+    </div>
+}
+
+
+
+<div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="col-md-4 col-md-offset-2" style="margin-bottom:15px; margin-top:15px;">
+        <form asp-area="AdminPanel" asp-controller="Productsize" asp-action="Edit" method="post">
+
+
+            <input asp-for="size.isEnable" type="hidden" />
+            <input asp-for="size.Id" type="hidden" />
+
+
+            <input name="catid" id="catid" type="hidden" />
+
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+
+
+            <div class="form-group">
+                <label asp-for="size.name" class="control-label"></label>
+                <input asp-for="size.name" class="form-control circleInput" placeholder="نام اندازه  را وارد نمایید مثال : بزرگ " />
+                <span asp-validation-for="size.name" class="text-danger"></span>
+            </div>
+
+
+            @if (Model.categories != null && Model.categories.Count() != 0)
+            {
+                bool findcat = false;
+
+                <div class="form-group scroll">
+                    <label class="control-label">دسته بندی محصول</label>
+                    <ul class="list-group" id="cat">
+                        @foreach (var category in Model.categories)
+                        {
+                            foreach (var selectcat in Model.selectedid)
+                            {
+                                if (category.Id == selectcat)
+                                {
+                                    <li class="list-group-item">
+                                        <input type="checkbox" checked value="@category.Id" />
+                                        <text>@category.Title</text>
+                                    </li>
+
+                                    findcat = true;
+                                    break;
+                                }
+
+                                findcat = false;
+
+                            }
+
+                            if (!findcat)
+                            {
+                                <li class="list-group-item">
+                                    <input type="checkbox"  value="@category.Id" />
+                                    <text>@category.Title</text>
+                                </li>
+                            }
+                        }
+
+                    </ul>
+                </div>
+
+            }
+
+
+
+
+
+            <div class="form-group">
+                <input type="submit" value="ویرایش" class="btn btn-success" />
+                <a asp-action="Index" class="btn btn-danger">بازگشت</a>
+            </div>
+
+
+
+        </form>
+
+    </div>
+
+
+</div>
+
+
+
+
+
+@section PanelScripts{
+
+
+    <script type="text/javascript">
+
+        var cats = [];
+
+        //....get size by category
+         function getproductsize(id) {
+
+
+            $.ajax
+            ({
+                type: "Get",
+                url: '@Url.Action("GetSizeByCategory", "productsize", new { area = "AdminPanel"})',
+                 data:{ catid : id } ,
+
+                 success: (res) =>
+                 {
+
+
+
+                     if (res.length == 0) {
+
+                         $('#sizesection').hide();
+                         return;
+                     }
+
+                     var out = "";
+                     for (var i = 0; i < res.length; i++)
+                     {
+
+                         out += "<li class='list-group-item'>"+
+                               "<input type='checkbox' class='size-val'  value=" +res[i].id +" /> &nbsp"
+                             + "<lable class='control-lable'>" + res[i].name + "<lable>" +
+                               "</li > ";
+
+                     }
+
+
+                     $('.sizes').html(out);
+
+                     var inputs = $('.size-val');
+
+                     for (var i = 0; i < inputs.length; i++) {
+
+                         //get single checkbox
+                         var el = inputs[i];
+
+
+                          //get checkbox value
+
+
+                         // checkbox change evevnt
+                         el.onchange = function ()
+
+                         {
+                             let id = $(this).val();
+
+                             if ($(this).is(":checked")) {
+
+
+                                 sizes.push(id)
+
+
+
+                             } else
+                             {
+
+                                 let c = sizes.indexOf(id);
+
+                                 sizes.splice(c, 1);
+
+
+
+                             }
+
+
+                             console.log(sizes);
+                             $('#sizes').val(JSON.stringify(sizes));
+
+                         }
+                     }
+
+
+
+                 }, error: (er) => {
+                    alert( "خطا  : " + er.message);
+                 }
+
+            });
+
+
+
+
+        }
+
+
+
+
+        //load prev selected size
+        
+
+        var sizechecks = $("ul#cat li input[type='checkbox']");
+
+        for (var i = 0; i < sizechecks.length; i++)
+        {
+            if (sizechecks[i].hasAttribute("checked"))
+            {
+                var cid = sizechecks[i].getAttribute('value');
+                cats.push(cid)
+            }
+
+        }
+
+        $('#catid').val(JSON.stringify(cats));
+        
+
+        $("ul#cat  li input[type='checkbox']").change(function () {
+            var id = $(this).val();
+
+            if ($(this).is(":checked"))
+            {
+                cats.push(id);
+
+            }
+            else
+            {
+                let c = cats.indexOf(id);
+
+                cats.splice(c, 1);
+            }
+
+            $('#catid').val(JSON.stringify(cats));
+
+        });
+
+
+
+
+
+    </script>
+}
+
+
+

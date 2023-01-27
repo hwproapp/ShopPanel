@@ -1,0 +1,92 @@
+﻿@model ReportProduct
+
+@{
+    Layout = null;
+}
+
+<form asp-controller="ReportReason" asp-action="Create" method="post" style="padding:10px">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">جزییات گزازش تخلف</h4>
+    </div>
+
+    <div class="modal-body form-horizontal">
+
+        <div style="text-align:center">
+            <h5>درخواست دهنده</h5>
+            <hr />
+            <img src="~/upload/userAppimage/normalimage/@Model.Tbl_UserApp.image" class="img-circle" width="100px" height="100px" style="margin-bottom:10px" />
+
+            <table class="table table-responsive text-center table-striped">
+                <thead>
+                    <tr style="font-size:15px; font-weight:600;" class="bg-info">
+
+                        <td>@Html.DisplayNameFor(model => model.Tbl_UserApp.firstName)</td>
+                        <td>@Html.DisplayNameFor(model => model.Tbl_UserApp.lastName)</td>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+
+                        <td>@Model.Tbl_UserApp.firstName</td>
+                        <td>@Model.Tbl_UserApp.lastName </td>
+
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <hr />
+
+
+        <div class="form-group">
+            <label asp-for="message" class="control-label"></label>
+            <br />
+            <p>
+                @Model.message
+            </p>
+        </div>
+
+        <hr />
+
+
+        <div class="form-group">
+            <label class="control-label"> محصول مرتبط </label>
+
+
+
+            <p>
+                <label asp-for="Tbl_product.title" class="control-label"></label>
+                @Model.Tbl_product.title
+            </p>
+
+
+
+            <p>
+                <label asp-for="Tbl_product.summary" class="control-label"></label>
+                @Model.Tbl_product.summary
+            </p>
+
+
+            <img src="~/upload/products/thumbnailimage/@Model.Tbl_product.image" class="img-thumbnail" />
+
+            <a class="btn btn-primary btn-block" asp-controller="Product" asp-action="Details" asp-route-Id="@Model.product_id">برو به محصول</a>
+        </div>
+
+
+
+    </div>
+
+
+    <div class="modal-footer" style="text-align:left;">
+
+      
+        <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+
+    </div>
+
+</form>

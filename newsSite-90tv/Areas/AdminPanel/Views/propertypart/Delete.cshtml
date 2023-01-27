@@ -1,0 +1,44 @@
+﻿@model Part 
+
+@{
+    Layout = null;
+}
+
+<style>
+    #name {
+        width: 300px;
+    }
+
+    .circleInput {
+        border-radius: 3px;
+    }
+</style>
+
+<form asp-controller="propertypart" asp-action="Delete" method="post">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"> حذف بخش</h4>
+    </div>
+
+    <div class="modal-body form-horizontal">
+
+        <div class="form-group">
+          آیا از حدف بخش <strong>"@Model.key"</strong> مطمئن هستید ؟؟
+        </div>
+
+
+        @*<div class="alert alert-info">
+            <span class="close" data-dismiss="alert">&times;</span>
+            <b>تمام خصوصیت های این بخش حذف میشود</b>
+        </div>*@
+    </div>
+
+
+    <div class="modal-footer" style="text-align:left;">
+        <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+        <button class="btn btn-danger" type="submit">
+           حذف
+        </button>
+    </div>
+
+</form>

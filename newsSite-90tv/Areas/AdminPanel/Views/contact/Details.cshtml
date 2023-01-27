@@ -1,0 +1,141 @@
+﻿@model ContactUs
+
+@using newsSite90tv.PublicClass
+
+
+@{
+    Layout = null;
+}
+
+
+<style>
+
+    .img-circle {
+        width: 100px;
+        height: 100px;
+        border: 1px solid red;
+    }
+
+    table {
+        margin-top: 20px;
+    }
+
+
+
+    h5 {
+    }
+
+
+
+    .center {
+        text-align: center;
+    }
+
+    .images {
+        overflow: scroll;
+        height: 300px;
+        width: 600px;
+        margin: auto;
+    }
+
+    .img-banner {
+        width: 200px;
+        height: 200px;
+    }
+
+    .center > img {
+        display: inline-block;
+    }
+
+        .center > img :hover {
+            transform: scale(2,2)
+        }
+
+
+        .scroll{
+            overflow:scroll;
+            width:inherit;
+            height:200px;
+        }
+</style>
+
+
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">
+        جزییات انتقاد کاربران ، ارتباط با ما
+    </h4>
+</div>
+<div class="modal-body form-horizontal">
+
+    <div class="center">
+        <h5>اطلاعات کاربر درخواست  دهنده</h5>
+        <hr />
+        <img src="~/upload/userAppimage/normalimage/@Model.Tbl_UserApp.image" class="img-circle " alt="@Model.Tbl_UserApp.firstName" />
+
+        <table class="table table-responsive text-center table-striped">
+            <thead>
+                <tr style="font-size:15px; font-weight:600;" class="bg-info">
+                    <td>@Html.DisplayNameFor(model => model.Tbl_UserApp.firstName)</td>
+                    <td>@Html.DisplayNameFor(model => model.Tbl_UserApp.lastName)</td>
+                    <td>@Html.DisplayNameFor(model => model.Tbl_UserApp.phone)</td>
+                    <td>@Html.DisplayNameFor(model => model.Tbl_UserApp.gender)</td>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@Model.Tbl_UserApp.firstName</td>
+                    <td>@Model.Tbl_UserApp.lastName </td>
+                    <td>@Model.Tbl_UserApp.phone</td>
+                    <td>
+                        @if (Model.Tbl_UserApp.gender == 1)
+                        {
+                            <span>آقا</span>
+                        }
+                        else
+                        {
+                            <span>خانم</span>
+                        }
+                    </td>
+
+
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+
+    <p>
+        <label asp-for="title" class="control-label"></label>
+        @Model.title
+    </p>
+
+    <p class="scroll">
+        <label asp-for="body" class="control-label"></label>
+        @Model.body
+    </p>
+
+    <p>
+        <label asp-for="status" class="control-label"></label>
+        @if (Model.status == contactstate.read.ToByte())
+        {
+            <b class="text-success">بررسی شده</b>
+        }
+        else
+        {
+            <b class="text-danger">بررسی نشده</b>
+        }
+    </p>
+
+
+
+
+    <div class="modal-footer" style="text-align:left;">
+        <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+    </div>
+</div>
+
+

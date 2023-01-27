@@ -1,0 +1,201 @@
+﻿@model IEnumerable<orderDetail>
+
+
+
+@using newsSite90tv.PublicClass
+
+@using newsSite90tv.Models.UnitOfWork 
+
+@inject IUnitOfWork _context
+
+@{
+    ViewData["Title"] = "جزییات سفارش ها ";
+
+    int row = 1;
+}
+
+
+<style>
+    #idximg {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+    }
+
+    .circleInput {
+        border-radius: 3px;
+    }
+</style>
+
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-@TempData["type"]">
+        <span class="close" data-dismiss="alert">
+            &times;
+        </span>
+
+        @TempData["message"]
+
+    </div>
+}
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="panel panel-primary col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+
+        <div class="panel-body">
+            <div>
+
+            </div>
+        </div>
+
+        <hr style="height:1px; background-color:gray;" />
+
+        <div class="box box-body table-responsive no-padding">
+
+            <table class="table table-responsive text-center">
+                <thead>
+                    <tr style="font-size:15px; font-weight:600;">
+                        <td>ردیف</td>
+                        <td>@Html.DisplayNameFor(model => model.order_id)</td>
+                        <td>@Html.DisplayNameFor(model => model.product_id)</td>
+                        <td>@Html.DisplayNameFor(model => model.shop_id)</td>
+                        <td>@Html.DisplayNameFor(model => model.color_id)</td>
+                        <td>@Html.DisplayNameFor(model => model.price)</td>
+                        <td>@Html.DisplayNameFor(model => model.qty)</td>
+                        <td>@Html.DisplayNameFor(model => model.totalprice)</td>
+                        <td>عملیات</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count() != 0)
+                    {
+                        @foreach (var item in Model)
+                        {
+
+                    <tr>
+                        <td>
+                            @(row++)
+                        </td>
+
+                        <td>
+
+                            <a class="btn btn-success" asp-controller="order" asp-action="Details" asp-route-Id="@item.order_id" data-toggle="modal" data-target="#modal-action-order">
+                                @item.Tbl_Order.codeorder
+                            </a>
+
+                        </td>
+
+
+                        <td>
+                            @item.Tbl_Product.title
+                        </td>
+
+
+                        <td>
+                            @item.Tbl_Shop.title
+                        </td>
+
+                        <td>
+                            @if (item.color_id != 0)
+                            {
+                                /**/
+
+                                var colorcode = _context.colorRepositoryUW.GetById(item.color_id).code;
+                                <button style="background-color:@colorcode">&nbsp; </button>
+                                
+                            }
+                            else
+                            {
+                                <text>-</text>
+                            }
+                        </td>
+
+                        <td>
+                            @item.price.RialToToman().ToPrice() تومان
+                        </td>
+
+                        <td>
+                            @item.qty
+                        </td>
+
+                        <td>
+                            @item.totalprice.RialToToman().ToPrice() تومان
+                        </td>
+
+
+
+
+                        <td>
+
+                            <a class="btn btn-danger" asp-controller="orderdetail" asp-action="Delete" asp-route-Id="@item.Id" data-toggle="modal" data-target="#modal-action-delete">
+                                <span class="glyphicon glyphicon-trash"></span>
+                                حذف
+                            </a>
+
+
+
+
+                        </td>
+                    </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@* Paging *@
+@if (ViewBag.PageCount > 1)
+{
+    <div class="row text-center">
+        <nav>
+            <ul class="pagination">
+                @if ((int)ViewBag.PageID > 1)
+                {
+                    @* Previous *@
+                    <li>
+                        <a asp-controller="orderdetail" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID - 1)" >
+                            <span>&laquo;</span>
+                        </a>
+                    </li>
+                }
+                @for (int i = 1; i <= (ViewBag.PageCount); i++)
+                {
+                    <li class="@(((int)ViewBag.PageID==i)?" active":"")">
+                        <a asp-controller="orderdetail" asp-action="Index" asp-route-page="@i" >
+                            @i
+                            <span class="sr-only"></span>
+                        </a>
+                    </li>
+                }
+                @if ((int)ViewBag.PageID <= (int)ViewBag.PageCount - 1)
+                {
+                    @* Next *@
+                    <li>
+                        <a asp-controller="orderdetail" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID + 1)" >
+                            <span>&raquo;</span>
+                        </a>
+                    </li>
+
+                }
+            </ul>
+        </nav>
+    </div>
+
+}
+
+
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-delete", Size = ModalSize.Large })
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-order", Size = ModalSize.Large })
+
+
+

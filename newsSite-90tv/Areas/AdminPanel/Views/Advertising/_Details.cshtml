@@ -1,0 +1,98 @@
+﻿@model shopadvertise
+
+@using newsSite90tv.Models.UnitOfWork
+
+@inject IUnitOfWork _context
+
+@using newsSite90tv.PublicClass
+
+@{
+    Layout = null;
+
+
+    var shopname = _context.shopRepositoryUW.GetById(Model.shop_id).title;
+  
+}
+
+<style>
+    .detailall > div{
+        display:inline-block;
+        margin-right:30px;
+        margin-bottom:10px
+        
+
+    }
+    .detailall > div {
+       padding:5px;
+    }
+    
+</style>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">جزییات تبلیغ</h4>
+    </div>
+
+    <div class="modal-body form-horizontal">
+
+        <div style="text-align:center">
+
+         
+            @if (!string.IsNullOrEmpty(Model.image))
+            {
+                <img src="~/upload/advImage/@Model.image" class="img-thumbnail"    />
+            }
+            else
+            {
+                <img src="~/upload/advImage/advdefault.jpg" class="img-thumbnail"  />
+            }
+        </div>
+        <hr />
+        <div>
+           
+            <p>
+                <label asp-for="shop_id" class="control-label">فروشگاه مربوط</label> &nbsp;
+                @shopname
+            </p>
+        </div>
+        <hr />
+        <div>
+            
+            <p>
+                <label asp-for="fromdateshamsi" class="control-label"></label> &nbsp; 
+                @Model.fromdateshamsi
+            </p>
+        </div>
+        <hr />
+
+        <div>
+           
+            <p>
+                <label asp-for="todateshamsi" class="control-label"></label> &nbsp; 
+                @Model.todateshamsi
+            </p>
+        </div>
+
+        <hr />
+
+
+        <hr />
+
+        <div>
+         
+            <p>
+                <label asp-for="status" class="control-label"></label> &nbsp; ;
+                @Model.status.checkStatus()
+            </p>
+        </div>
+
+
+
+
+    </div>
+
+
+    <div class="modal-footer" style="text-align:left;">
+        <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+    </div>
+

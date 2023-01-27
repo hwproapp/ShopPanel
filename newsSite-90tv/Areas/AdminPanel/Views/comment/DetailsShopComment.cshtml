@@ -1,0 +1,152 @@
+﻿@model shopcomments
+
+@using newsSite90tv.PublicClass
+
+
+
+@using newsSite90tv.Models.UnitOfWork;
+@inject IUnitOfWork _conx
+
+@{
+    ViewData["Title"] = "جزییات نظر کاربران";
+}
+
+
+<style>
+    .circleInput {
+        border-radius: 3px;
+    }
+
+    #reportbtns a {
+        margin-top: 5px;
+        display: block;
+    }
+
+
+    .carousel-wrapper .carousel .carousel-cell {
+        margin-right: 13px;
+    }
+
+        .carousel-wrapper .carousel .carousel-cell img {
+            height: 100px;
+            width: 100px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 7px 3px gray;
+        }
+</style>
+
+
+<div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;height:auto">
+    <div class="col-md-8 col-md-offset-3" style="margin-bottom:5px; margin-top:15px;">
+
+
+        @{
+            var user = _conx.userappRepositoryUW.GetById(Model.appuser_id);
+            var shop = _conx.shopRepositoryUW.GetById(Model.shop_id);
+        }
+
+
+
+        <div class="form-group">
+            <label asp-for="appuser_id" class="control-label"></label>
+
+            <p>@user.firstName @user.lastName</p>
+
+            <a class="btn btn-sm btn-info" asp-controller="userapp" asp-action="details"
+               asp-route-id="@user.Id" data-toggle="modal" data-target="#modal-all-support-user">
+                <i class="glyphicon glyphicon-info-sign"></i>
+                بیشتر
+            </a>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            <label asp-for="shop_id" class="control-label"></label>
+
+            <p> @shop.title</p>
+            <a class="btn btn-sm btn-info" asp-controller="Product" asp-action="productdetailmore"
+               asp-route-id="@Model.shop_id" data-toggle="modal" data-target="#modal-all-support">
+                <i class="glyphicon glyphicon-info-sign"></i>
+                بیشتر
+            </a>
+
+        </div>
+        <hr />
+        <div class="form-group">
+            <label asp-for="body" class="control-label"></label>
+
+            <p>
+                @Model.body
+            </p>
+
+        </div>
+        <hr />
+
+
+        <div>
+           
+
+            <p>
+                @if (Model.replyto != 0)
+                {
+
+
+                    var replcom = _conx.shopCommentUW.Get(a => a.Id == Model.replyto).FirstOrDefault();
+                    if (replcom != null)
+                    {
+                        <label asp-for="replyto" class="control-label"></label>
+
+                        <a class="btn btn-sm btn-info" asp-controller="comment" asp-action="details"
+                           asp-route-id="@replcom.Id">
+                            <i class="glyphicon glyphicon-info-sign"></i>
+                            @replcom.body
+                        </a>
+                    }
+
+                }
+                else
+                {
+                    <strong>
+                        وجود ندارد
+                    </strong>
+                }
+            </p>
+        </div>
+
+        <hr />
+
+        <div class="form-group">
+            <label asp-for="dateShamsi" class="control-label"></label>
+
+            <p>
+                @Model.dateShamsi
+            </p>
+
+        </div>
+
+     
+
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-all-support", Size = ModalSize.Large })
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-all-support-user", Size = ModalSize.Medium })
+
+@section PanelScripts{
+    <script src="~/js/modal-js/all-support-index.js"></script>
+
+
+
+
+}

@@ -1,0 +1,139 @@
+﻿@model IEnumerable<Shop>
+
+@using newsSite90tv.PublicClass
+@using newsSite90tv.Models.UnitOfWork
+@{
+    ViewData["Title"] = "فروشگاه";
+
+    int row = 1;
+}
+
+
+@inject IUnitOfWork _context
+<h5 class="text-center text-bold">فروشگاه مورد نظر را انتخاب کنید</h5>
+<div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;">
+
+    <div class="panel panel-primary col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+
+
+
+        <hr style="height:1px; background-color:gray;" />
+
+        <div class="box box-body table-responsive no-padding">
+
+            <table class="table table-responsive text-center">
+                <thead>
+                    <tr style="font-size:15px; font-weight:600;">
+                        <td>
+                            انتخاب
+                        </td>
+                        <td>ردیف</td>
+                        <td>@Html.DisplayNameFor(model => model.title)</td>
+                        <td>@Html.DisplayNameFor(model => model.ostan_id)</td>
+                        <td>@Html.DisplayNameFor(model => model.city_id)</td>
+
+                        <td>@Html.DisplayNameFor(model => model.dateShamsi)</td>
+                        <td>@Html.DisplayNameFor(model => model.status)</td>
+
+                        <td>عملیات</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+
+                        <tr>
+                            <td>
+                                <input type="radio" name="shop" class="shop-radio" @if (ViewBag.shopNo == item.Id) { <text> checked </text> } value="@item.Id"  sel ="@item.seller_id"/>
+                            </td>
+                            <td>
+                                @(row++)
+                                @if (string.IsNullOrEmpty(item.user_id))
+                                {
+
+                                    <span class="fa fa-android text-success" title=" توسط اپلیکیشن"></span>
+                                }
+                                else
+                                {
+                                    <i class="glyphicon glyphicon-globe text-primary" title="توسط پنل"></i>
+                                }
+                            </td>
+
+                            <td>@item.title</td>
+                            <td>
+                                @{
+                                    var ost = _context.ostanRepositoryUW.GetById(item.ostan_id);
+                                }
+                                @ost.title
+                            </td>
+                            <td>
+                                @{
+                                    var ct = _context.cityRepositoryUW.GetById(item.city_id);
+                                }
+                                @ct.title
+                            </td>
+
+                            <td>@item.dateShamsi</td>
+                            <td>@item.status.checkStatus()</td>
+
+
+
+
+                            <td>
+
+
+                                <a class="btn btn-sm btn-info" asp-controller="shop" asp-action="Details" asp-route-id="@item.Id"
+                                   data-toggle="modal" data-target="#modal-action-shop-detailprod">
+                                    <i class="glyphicon glyphicon-info-sign"></i>
+                                    جزییات
+                                </a>
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+@* Paging *@
+@if (ViewBag.PageCountShop > 1)
+{
+    <div class="row text-center">
+        <nav>
+            <ul class="pagination">
+                @if ((int)ViewBag.PageID > 1)
+                {
+                    @* Previous *@
+                    <li>
+                        <a onclick="shoppaging(@((int)ViewBag.PageID - 1))">
+                            <span>&laquo;</span>
+                        </a>
+                    </li>
+                }
+                @for (int i = 1; i <= (ViewBag.PageCountShop); i++)
+                {
+                    <li class="@(((int)ViewBag.PageID==i)?" active":"")">
+                        <a onclick="shoppaging(@i)">
+                            @i
+                            <span class="sr-only"></span>
+                        </a>
+                    </li>
+                }
+                @if ((int)ViewBag.PageID <= (int)ViewBag.PageCountShop - 1)
+                {
+                    @* Next *@
+                    <li>
+                        <a onclick="shoppaging(@((int)ViewBag.PageID + 1))">
+                            <span>&raquo;</span>
+                        </a>
+                    </li>
+
+                }
+            </ul>
+        </nav>
+    </div>
+
+}

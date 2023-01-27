@@ -1,0 +1,248 @@
+﻿@using newsSite90tv.Models.UnitOfWork;
+
+
+@model Shop
+
+@using newsSite90tv.PublicClass
+
+
+@inject IUnitOfWork _contex
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/flickity@2.0/dist/flickity.min.css">
+<link href="https://static.neshan.org/sdk/openlayers/5.3.0/ol.css" rel="stylesheet" type="text/css">
+
+<style>
+    .circleInput {
+        border-radius: 3px;
+    }
+
+    #reportbtns a {
+        margin-top: 10px;
+        display: block;
+    }
+
+    #reportbtns {
+        margin-top: 10px;
+    }
+</style>
+
+
+<div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;height:auto">
+    <div class="col-md-6 col-md-offset-1" style="margin-bottom:5px; margin-top:15px;">
+
+
+        <h4 class="text-center">جزییات فروشگاه "@Model.title"</h4>
+
+        <hr />
+
+        <div class="form-group">
+            <label asp-for="title" class="control-label"></label>
+
+            <p>
+                @Model.title
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="summary" class="control-label"></label>
+
+            <p>
+                @Model.summary
+            </p>
+        </div>
+
+
+        <div class="form-group">
+            <label asp-for="ostan_id" class="control-label"></label>
+
+            <p>
+                @{
+                    var ost = _contex.ostanRepositoryUW.Get(a => a.Id == Model.ostan_id).FirstOrDefault();
+                }
+
+                @ost.title
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="city_id" class="control-label"></label>
+
+            <p>
+                @{
+                    var ct = _contex.cityRepositoryUW.Get(a => a.Id == Model.city_id).FirstOrDefault();
+                }
+
+                @ct.title
+            </p>
+        </div>
+        <div class="form-group">
+            <label asp-for="address" class="control-label"></label>
+
+            <p>
+                @Model.address
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">موقعیت فروشگاه</label>
+            <div id="map" style="width: 600px; height: 450px; background: #eee; border: 2px solid #aaa;"></div>
+            <div class="mouse-position"></div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="viewCount" class="control-label"></label>
+
+            <p>
+                @Model.viewCount
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">دنبال کننده</label>
+            @{
+                var fcount = _contex.FollowShopRepositoryUW.Get(a => a.shop_id == Model.Id && a.isenable);
+
+            }
+
+            <p>
+                @if (fcount != null)
+                {
+                    <b>
+                        @fcount.Count()
+                    </b>
+                }
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="dateShamsi" class="control-label"></label>
+
+            <p>
+                @Model.dateShamsi
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="status" class="control-label"></label>
+
+            <p>
+                @Model.status.checkStatus()
+            </p>
+        </div>
+
+
+
+
+
+        <div id="reportbtns">
+            <a class="btn btn-sm btn-success" asp-controller="saller" asp-action="Details"
+               asp-route-id="@Model.seller_id" data-toggle="modal" data-target="#modal-action-detail-userApp">
+                <i class="glyphicon glyphicon-check"></i>
+
+                نمایش فروشنده فروشگاه
+            </a>
+
+            <a class="btn btn-sm btn-info" asp-controller="shop" asp-action="shopProduct"
+               asp-route-id="@Model.Id">
+                <i class="glyphicon glyphicon-apple"></i>
+                لیست محصولات فروشگاه
+            </a>
+
+           
+        </div>
+
+
+
+    </div>
+
+
+    <div class="col-md-4" style="margin-top:25px; margin-bottom:25px;">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="box box-widget widget-user">
+                <div class="widget-user-header bg-light-blue-active text-center">
+                    <h3 class="widget-user-username">تصویر فروشگاه</h3>
+                </div>
+            </div>
+
+
+            @if (!string.IsNullOrEmpty(Model.image))
+            {
+                <div class="form-group">
+                    <img id="imguser" class="img-bordered col-md-12 col-xs-12 col-sm-12"
+                         src="~/upload/shop/normalimage/@Model.image" alt="UserImage"
+                         style="height:300px;" />
+                </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <img id="imguser" class="img-bordered col-md-12 col-xs-12 col-sm-12"
+                         src="~/upload/shop/normalimage/shopdefult.png" alt="UserImage"
+                         style="height:300px;" />
+                </div>
+            }
+
+            <div id="divmessage" class="text-center hidden" style="color:green;">
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+</div>
+
+
+
+
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-detail-userApp", Size = ModalSize.Medium })
+
+
+@section PanelScripts{
+
+    <script src="~/js/modal-js/userApp-index.js"></script>
+    <script src="~/js/modal-js/shopproduct-index.js"></script>
+
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+    <script src="https://static.neshan.org/sdk/openlayers/5.3.0/ol.js" type="text/javascript"></script>
+    <script src="https://static.neshan.org/sdk/openlayers/5.3.0/ol.js" type="text/javascript"></script>
+
+
+    <script>
+    var mousePositionControl = new ol.control.MousePosition({
+    coordinateFormat: ol.coordinate.createStringXY(8),
+    projection: 'EPSG:4326',
+    // comment the following two lines to have the mouse position
+    // be placed within the map.
+    className: 'custom-mouse-position',
+    target: document.getElementById('mouse-position'),
+    undefinedHTML: '&nbsp;'
+    });
+
+
+    
+
+    var myMap = new ol.Map({
+
+    controls: ol.control.defaults().extend([mousePositionControl]),
+
+    target: 'map',
+    key: 'web.3Tw6DQBH9D1iyuHQeFtYoSp3AL03tkcwdJCRzeyJ',
+    maptype: 'dreamy',
+    poi: true,
+    traffic: false,
+    view: new ol.View({
+    center: ol.proj.fromLonLat([@Model.lot,@Model.lat]),
+    zoom: 14
+    })
+
+    })
+
+    </script>
+
+}

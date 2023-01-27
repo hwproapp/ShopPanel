@@ -1,0 +1,197 @@
+﻿@model IEnumerable<Comment>
+
+@using newsSite90tv.Models.UnitOfWork
+
+
+@using newsSite90tv.PublicClass
+
+@{
+    ViewData["Title"] = "نظرات کاربران";
+
+    int row = 1;
+}
+
+@inject IUnitOfWork _conx
+
+<style>
+    #idximg {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+    }
+
+    .circleInput {
+        border-radius: 3px;
+    }
+</style>
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-@TempData["type"]">
+        <span class="close" data-dismiss="alert">&times;</span>
+        @TempData["message"]
+
+    </div>
+}
+
+
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="panel panel-primary col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+
+        <div class="panel-body">
+            <div>
+
+
+                @*<a class="btn btn-info " asp-controller="product" asp-action="searchBox" data-target="#modal-action-all" data-toggle="modal">
+                        <i class="glyphicon glyphicon-search"></i>
+                        جستجو
+                    </a>*@
+
+            </div>
+
+        </div>
+
+
+
+
+
+
+        <hr style="height:1px; background-color:gray;" />
+
+        <div class="box box-body table-responsive no-padding">
+
+            <table class="table table-responsive text-center">
+                <thead>
+                    <tr style="font-size:15px; font-weight:600;">
+                        <td>ردیف</td>
+                        <td>@Html.DisplayNameFor(model => model.appuser_id)</td>
+                        <td>@Html.DisplayNameFor(model => model.dateShamsi)</td>
+                        <td>@Html.DisplayNameFor(model => model.status)</td>
+                        <td>عملیات</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count() != 0)
+                    {
+                        @foreach (var item in Model)
+                        {
+
+                            <tr>
+                                <td>
+                                    @(row++)
+                                </td>
+
+                                <td>
+                                    @item.Tbl_UserApp.firstName @item.Tbl_UserApp.lastName
+                                </td>
+
+
+                                <td>
+                                    @item.dateShamsi
+                                </td>
+
+
+                                <td>
+                                    @item.status.checkStatus()
+                                </td>
+
+                                <td>
+                                    <a class="btn btn-info" asp-controller="comment" asp-action="Details" asp-route-Id="@item.Id">
+                                        <span class="glyphicon glyphicon-info-sign"></span>
+                                        جزییات
+                                    </a>
+
+
+                                    <a class="btn btn-danger" asp-controller="comment" asp-action="Delete" asp-route-Id="@item.Id"
+                                       data-toggle="modal" data-target="#modal-action-all">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                        حذف
+                                    </a>
+
+
+                                    @if (item.status == (byte)Status.suspend)
+                                    {
+                                        <a class="btn btn-sm btn-success" asp-controller="comment" asp-action="changeStatus"
+                                           asp-route-id="@item.Id" asp-route-state="1">
+                                            <i class="glyphicon glyphicon-check"></i>
+                                            تایید
+                                        </a>
+
+                                        <a class="btn btn-sm btn-danger" asp-controller="comment" asp-action="changeStatus"
+                                           asp-route-id="@item.Id" asp-route-state="2">
+                                            <i class="glyphicon glyphicon-erase"></i>
+                                            رد کردن
+                                        </a>
+
+                                    }
+
+                                </td>
+
+
+
+
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+@* Paging *@
+@if (ViewBag.PageCount > 1)
+{
+    <div class="row text-center">
+        <nav>
+            <ul class="pagination">
+                @if ((int)ViewBag.PageID > 1)
+                {
+                    @* Previous *@
+                    <li>
+                        <a asp-controller="comment" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID - 1)">
+                            <span>&laquo;</span>
+                        </a>
+                    </li>
+                }
+                @for (int i = 1; i <= (ViewBag.PageCount); i++)
+                {
+                    <li class="@(((int)ViewBag.PageID==i)?" active":"")">
+                        <a asp-controller="comment" asp-action="Index" asp-route-page="@i">
+                            @i
+                            <span class="sr-only"></span>
+                        </a>
+                    </li>
+                }
+                @if ((int)ViewBag.PageID <= (int)ViewBag.PageCount - 1)
+                {
+                    @* Next *@
+                    <li>
+                        <a asp-controller="comment" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID + 1)">
+                            <span>&raquo;</span>
+                        </a>
+                    </li>
+
+                }
+            </ul>
+        </nav>
+    </div>
+
+}
+
+
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-all", Size = ModalSize.Large })
+
+@section PanelScripts{
+    <script src="~/js/modal-js/all-support-index.js"></script>
+
+
+
+
+}

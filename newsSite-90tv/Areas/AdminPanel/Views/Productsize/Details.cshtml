@@ -1,0 +1,73 @@
+﻿
+
+@model newsSite90tv.Models.ViewModels.SizeDetailViewModel
+
+@{
+
+    ViewData["Title"] = "جزییات سایز بندی محصول";
+
+
+
+}
+
+
+<style>
+    .circleInput {
+        border-radius: 3px;
+    }
+
+    #reportbtns a {
+        margin-top: 10px;
+        display: block;
+    }
+
+
+
+    .scroll {
+        overflow: scroll;
+        height: 250px;
+    }
+</style>
+
+
+<div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;height:auto">
+    <div class="col-md-4 col-md-offset-2" style="margin-bottom:5px; margin-top:15px;">
+
+
+        <div class="form-group">
+            <p>
+                <label asp-for="size.name" class="control-label"></label>
+                @Model.size.name
+            </p>
+        </div>
+
+
+        <hr />
+
+        @if (Model.category != null && Model.category.Count() != 0)
+        {
+            <label>دسته بندی انتخابی</label>
+            <div class="form-group scroll">
+                <ul class="list-group">
+                    @foreach (var item in Model.category)
+                    {
+                        <li class="list-group-item">
+                            @item
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+
+
+    </div>
+
+
+
+</div>
+
+
+
+
+
+

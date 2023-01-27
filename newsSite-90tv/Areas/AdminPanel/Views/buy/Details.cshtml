@@ -1,0 +1,264 @@
+﻿@model Buy
+
+
+@using newsSite90tv.PublicClass
+
+@using newsSite90tv.Models.UnitOfWork
+
+
+@inject IUnitOfWork _context
+
+@{
+    Layout = null;
+
+    var buyeraddress = _context.useraddRepositoryUW.Get(a => a.Id == Model.buyeradd_id, null, "Tbl_city,Tbl_ostan").FirstOrDefault();
+
+}
+
+
+<style>
+    .img-circle {
+        width: 100px;
+        height: 100px;
+        border: 1px solid red;
+    }
+
+    table {
+        margin-top: 20px;
+    }
+
+
+
+    h5 {
+    }
+
+
+
+    .center {
+        text-align: center;
+    }
+
+    .images {
+        overflow: scroll;
+        height: 300px;
+        width: 600px;
+        margin: auto;
+    }
+
+    .img-banner {
+        width: 200px;
+        height: 200px;
+    }
+
+    .center > img {
+        display: inline-block;
+    }
+
+        .center > img :hover {
+            transform: scale(2,2)
+        }
+</style>
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">جزییات خرید</h4>
+</div>
+
+<div class="modal-body form-horizontal">
+
+    @if (Model != null)
+    {
+        <div class="center">
+            <h5>اطلاعات خریدار</h5>
+            <hr />
+            <img src="~/upload/userAppimage/normalimage/@Model.Tbl_UserApp.image" class="img-circle " alt="@Model.Tbl_UserApp.firstName" />
+
+            <table class="table table-responsive text-center table-striped">
+                <thead>
+                    <tr style="font-size:15px; font-weight:600;" class="bg-info">
+                        <td>@Html.DisplayNameFor(model => model.Tbl_UserApp.firstName)</td>
+                        <td>@Html.DisplayNameFor(model => model.Tbl_UserApp.lastName)</td>
+                        <td>@Html.DisplayNameFor(model => model.Tbl_UserApp.phone)</td>
+                        <td>@Html.DisplayNameFor(model => model.Tbl_UserApp.gender)</td>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.Tbl_UserApp.firstName</td>
+                        <td>@Model.Tbl_UserApp.lastName </td>
+                        <td>@Model.Tbl_UserApp.phone</td>
+                        <td>
+                            @if (Model.Tbl_UserApp.gender == 1)
+                            {
+                                <span>آقا</span>
+                            }
+                            else
+                            {
+                                <span>خانم</span>
+                            }
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+            </table>
+        </div>
+
+
+        @if (buyeraddress != null)
+        {
+
+            <hr />
+            <br />
+
+            <div class="center">
+                <h5> آدرس خریدار</h5>
+                <hr />
+
+                <table class="table table-responsive text-center table-striped">
+                    <thead>
+                    <thead>
+
+                        <tr style="font-size:15px; font-weight:600;" class="bg-info">
+
+                            <td>شناره همراه</td>
+                            <td>شماره تلفن</td>
+                            <td>استان</td>
+                            <td>شهر</td>
+                            <td>کد پستی</td>
+                            <td>آدرس</td>
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@buyeraddress.mobile</td>
+                            <td>@buyeraddress.phone</td>
+                            <td>@buyeraddress.Tbl_ostan.title</td>>
+                            <td>@buyeraddress.Tbl_city.title</td>
+                            <td>@buyeraddress.postalcode</td>
+                            <td>@buyeraddress.address</td>
+
+
+
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        <hr />
+        <br />
+
+
+        <div class="text-center">
+
+
+
+
+
+            <div >
+
+                <img src="~/upload/products/thumbnailimage/@Model.Tbl_Product.image" class="img-thumbnail" alt=" @Model.Tbl_Product.title" />
+
+                <p>  <label asp-for="product_id"></label>   @Model.Tbl_Product.title</p>
+            </div>
+
+            
+
+            <div >
+
+                <img src="~/upload/shop/thumbnailimage/@Model.Tbl_Shop.image" class="img-thumbnail" alt="@Model.Tbl_Shop.title" />
+
+                <p> <label asp-for="shop_id"></label>   @Model.Tbl_Shop.title</p>
+            </div>
+
+            <br />
+            <hr />
+
+
+        </div>
+
+        <p>
+            <label asp-for="qty"></label>
+            @Model.qty  عدد
+        </p>
+
+
+        <p>
+            @if (Model.color_id != 0)
+            {
+                /**/
+                <label asp-for="color_id"></label>
+
+                var colorcode = _context.colorRepositoryUW.GetById(Model.color_id).code;
+                <button style="background-color:@colorcode">&nbsp; </button>
+
+            }
+            else
+            {
+                <text>-</text>
+            }
+
+        </p>
+        <p>
+            <label asp-for="price"></label>
+            @Model.price.RialToToman().ToPrice() تومان
+        </p>
+
+
+        <p>
+            <label asp-for="totalprice"></label>
+            @Model.totalprice.RialToToman().ToPrice() تومان
+        </p>
+
+
+
+        <p>
+            <label asp-for="posttype"></label>
+            @if (Model.posttype == 0)
+            {
+
+                <text>سفارشی</text>
+
+            }
+            else if (Model.posttype == 1)
+            {
+                <text>پیشتاز</text>
+            }
+        </p>
+
+
+        <p>
+            <label asp-for="createdatesh"></label>
+            @Model.createdatesh
+        </p>
+
+
+
+        <p>
+            <label asp-for="buystatus"></label>
+            @Model.buystatus.checkbuyStatus()
+        </p>
+
+
+
+
+        }
+
+
+
+
+
+
+
+        <div class="modal-footer" style="text-align:left;">
+            <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+        </div>
+
+
+</div>

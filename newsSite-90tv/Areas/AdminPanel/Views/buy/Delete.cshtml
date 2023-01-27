@@ -1,0 +1,26 @@
+﻿@model Buy
+
+@{
+    Layout = null;
+}
+
+<form asp-controller="buy" asp-action="Delete" method="post">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">حذف خرید</h4>
+    </div>
+        
+    <div class="modal-body form-horizontal">
+        آیا از حذف این خرید   مطمئن هستید؟
+       
+    </div>
+
+
+    <div class="modal-footer" style="text-align:left;">
+        <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+        <button class="btn btn-danger" type="submit">
+            حذف
+        </button>
+    </div>
+
+</form>

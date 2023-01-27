@@ -1,0 +1,35 @@
+﻿@model ReportReason
+
+@{
+    Layout = null;
+}
+
+<form asp-controller="ReportReason" asp-action="Edit" method="post" style="padding:10px;">
+
+    <input asp-for="isenable" type="hidden" />
+    <input asp-for="Id" type="hidden" />
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"> ویرایش دلیل تخلف "@Model.title"</h4>
+    </div>
+
+        <div class="modal-body form-horizontal">
+
+            <div class="form-group">
+                <label asp-for="title" class="control-label"></label>
+                <input asp-for="title" class="form-control circleInput" placeholder="مثال : محصول ناقص است" />
+                <span asp-validation-for="title" class="text-danger"></span>
+            </div>
+
+
+        </div>
+
+
+
+        <div class="modal-footer" style="text-align:left;">
+            <button class="btn btn-success" type="submit">ویرایش</button>
+            <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+        </div>
+
+</form>

@@ -1,0 +1,183 @@
+﻿@model IEnumerable<Plan>
+
+@using newsSite90tv.PublicClass
+
+@{
+    ViewData["Title"] = "مدیریت پلن های فعال سازی ";
+
+    int row = 1;
+}
+
+<style>
+    #idximg {
+        height: 100%;
+        width: 100%;
+    }
+</style>
+
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-@TempData["type"]">
+        <span class="close" data-dismiss="alert">&times;</span>
+
+        @TempData["message"]
+
+    </div>
+}
+
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="panel panel-primary col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+
+        <div class="panel-body">
+            <div>
+                <a class="btn btn-primary" asp-controller="plan" asp-action="Create">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    افزودن  پلن
+                </a>
+            </div>
+        </div>
+
+        <hr style="height:1px; background-color:gray;" />
+
+        <div class="box box-body table-responsive no-padding">
+
+            <table class="table table-responsive text-center">
+                <thead>
+                    <tr style="font-size:15px; font-weight:600;">
+                        <td>ردیف</td>
+                        <td>@Html.DisplayNameFor(model => model.namefa)</td>
+                        <td>@Html.DisplayNameFor(model => model.nameen)</td>
+                        <td>@Html.DisplayNameFor(model => model.plantype)</td>
+                        <td>@Html.DisplayNameFor(model => model.count)</td>
+                        <td>@Html.DisplayNameFor(model => model.type)</td>
+
+                        <td>عملیات</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+
+                        <tr>
+                            <td>
+                                @(row++)
+
+                            </td>
+
+
+                            <td>
+                                @item.nameen
+                            </td>
+
+
+                            <td>
+                                @item.namefa
+                            </td>
+
+                            <td>
+                                @if (item.plantype == 0)
+                                {
+                                    <text> روزانه</text>
+                                }
+                                else if (item.plantype == 1)
+                                {
+                                    <text> ماهانه</text>
+                                }
+                                else
+                                {
+                                    <text> سالانه</text>
+                                }
+                            </td>
+
+
+                            <td>
+                                @item.count
+                            </td>
+
+                            <td>
+                                @(item.type == 0 ? "فعال سازی فروشگاه" : "تبلیغ فروشگاه")
+                            </td>
+
+
+                            <td>
+
+                                <a class="btn btn-info" asp-controller="Plan" asp-action="Details" asp-route-id="@item.Id"
+                                   data-toggle="modal" data-target="#modal-action-planinfo">
+                                    <i class="glyphicon glyphicon-info-sign"></i>
+                                    جزییات
+                                </a>
+
+                                <a class="btn btn-primary" asp-controller="Plan" asp-action="Edit" asp-route-id="@item.Id">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                    ویرایش
+                                </a>
+
+                                <a class="btn btn-danger" asp-controller="Plan" asp-action="Delete"
+                                   asp-route-id="@item.Id " data-toggle="modal" data-target="#modal-action-plan">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                    حذف
+                                </a>
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+
+@* Paging *@
+@if (ViewBag.PageCount > 1)
+{
+    <div class="row text-center">
+        <nav>
+            <ul class="pagination">
+                @if ((int)ViewBag.PageID > 1)
+                {
+                    @* Previous *@
+                    <li>
+                        <a asp-controller="plan" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID - 1)">
+                            <span>&laquo;</span>
+                        </a>
+                    </li>
+                }
+                @for (int i = 1; i <= (ViewBag.PageCount); i++)
+                {
+                    <li class="@(((int)ViewBag.PageID==i)?" active":"")">
+                        <a asp-controller="plan" asp-action="Index" asp-route-page="@i">
+                            @i
+                            <span class="sr-only"></span>
+                        </a>
+                    </li>
+                }
+                @if ((int)ViewBag.PageID <= (int)ViewBag.PageCount - 1)
+                {
+                    @* Next *@
+                    <li>
+                        <a asp-controller="plan" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID + 1)">
+                            <span>&raquo;</span>
+                        </a>
+                    </li>
+
+                }
+            </ul>
+        </nav>
+    </div>
+
+}
+
+
+
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-plan", Size = ModalSize.Medium })
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-planinfo", Size = ModalSize.Medium })
+
+@section PanelScripts{
+
+    <script src="~/js/modal-js/category-index.js"></script>
+}

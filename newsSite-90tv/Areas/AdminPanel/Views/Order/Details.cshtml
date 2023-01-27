@@ -1,0 +1,199 @@
+﻿@model Order
+
+
+@using newsSite90tv.PublicClass
+
+@using newsSite90tv.Models.UnitOfWork
+
+
+@inject IUnitOfWork _context
+
+@{
+    Layout = null;
+
+    var buyeraddress = _context.useraddRepositoryUW.Get(a => a.Id == Model.useradd_id, null, "Tbl_city,Tbl_ostan").FirstOrDefault();
+
+}
+
+
+<style>
+    .img-circle {
+        width: 100px;
+        height: 100px;
+        border: 1px solid red;
+    }
+
+    table {
+        margin-top: 20px;
+    }
+
+
+
+    h5 {
+    }
+
+
+
+    .center {
+        text-align: center;
+    }
+
+    .images {
+        overflow: scroll;
+        height: 300px;
+        width: 600px;
+        margin: auto;
+    }
+
+    .img-banner {
+        width: 200px;
+        height: 200px;
+    }
+
+    .center > img {
+        display: inline-block;
+    }
+
+        .center > img :hover {
+            transform: scale(2,2)
+        }
+</style>
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">سفارش @Model.codeorder"</h4>
+</div>
+
+<div class="modal-body form-horizontal">
+
+    @if (Model != null)
+    {
+        <div class="center">
+            <h5>اطلاعات خریدار</h5>
+            <hr />
+            <img src="~/upload/userAppimage/normalimage/@Model.Tbl_UserApp.image" class="img-circle " alt="@Model.Tbl_UserApp.firstName" />
+
+            <table class="table table-responsive text-center table-striped">
+                <thead>
+                    <tr style="font-size:15px; font-weight:600;" class="bg-info">
+                        <td>@Html.DisplayNameFor(model => model.Tbl_UserApp.firstName)</td>
+                        <td>@Html.DisplayNameFor(model => model.Tbl_UserApp.lastName)</td>
+                        <td>@Html.DisplayNameFor(model => model.Tbl_UserApp.phone)</td>
+                        <td>@Html.DisplayNameFor(model => model.Tbl_UserApp.gender)</td>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.Tbl_UserApp.firstName</td>
+                        <td>@Model.Tbl_UserApp.lastName </td>
+                        <td>@Model.Tbl_UserApp.phone</td>
+                        <td>
+                            @if (Model.Tbl_UserApp.gender == 1)
+                            {
+                                <span>آقا</span>
+                            }
+                            else
+                            {
+                                <span>خانم</span>
+                            }
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+            </table>
+        </div>
+
+
+        @if (buyeraddress != null)
+        {
+
+            <hr />
+            <br />
+            <div class="center">
+                <h5>اطلاعات آدرس خریدار</h5>
+                <hr />
+
+                <table class="table table-responsive text-center table-striped">
+                    <thead>
+                        <tr style="font-size:15px; font-weight:600;" class="bg-info"></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@buyeraddress.mobile</td>
+                            <td>@buyeraddress.phone</td>
+                            <td>@buyeraddress.address</td>
+
+
+                            <td>@buyeraddress.Tbl_city.title</td>
+                            <td>@buyeraddress.Tbl_ostan.title</td>>
+                            <td>@buyeraddress.address</td>
+                            <td>@buyeraddress.postalcode</td>
+
+
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        <hr />
+        <br />
+
+        <p>
+            <label asp-for="postprice"></label>
+            @Model.postprice.RialToToman().ToPrice() تومان
+        </p>
+
+
+        <p>
+            <label asp-for="posttype"></label>
+            @if (Model.posttype == 0)
+            {
+
+                <text>سفارشی</text>
+
+            }
+            else if (Model.posttype == 1)
+            {
+                <text>پیشتاز</text>
+            }
+        </p>
+
+
+        <p>
+            <label asp-for="dateshamsi"></label>
+            @Model.dateshamsi
+        </p>
+
+        <p>
+            <label asp-for="isfinish"></label>
+            @if (Model.isfinish)
+            {
+                <text>پرداخت شده</text>
+            }
+            else
+            {
+                <text>در   انتظار پرداخت</text>
+            }
+        </p>
+
+        <p>
+            @if (Model.isfinish)
+            {
+                <label asp-for="isfinish"></label>
+                <text>@Model.finishdateshamsi</text>
+            }
+        </p>
+    }
+
+
+</div>
+
+
+<div class="modal-footer" style="text-align:left;">
+    <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+</div>

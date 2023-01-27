@@ -1,0 +1,9 @@
+﻿
+@model IEnumerable<City>
+
+<div class="form-group">
+    <label  class="control-label">شهر</label>
+    <select name="@ViewBag.name" id="@ViewBag.id" asp-items="@(new SelectList(Model,"Id","title"))" class="form-control circleInput">
+        <option>---شهر خود را انتخاب کنید---</option>
+    </select>
+</div>

@@ -1,0 +1,221 @@
+﻿@model IEnumerable<UserApp>
+@using newsSite90tv.PublicClass
+@{
+    ViewData["Title"] = "کاربران اپلیکیشن";
+
+    int row = 1;
+}
+
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-@TempData["type"]">
+        <span class="close" data-dismiss="alert">&times;</span>
+        @TempData["message"]
+    </div>
+}
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="panel panel-primary col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+
+        <div class="panel-body">
+            <div>
+                <a class="btn btn-primary" asp-controller="UserApp" asp-action="Create">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    افزودن کاربر   اپلیکیشن
+                </a>
+
+                <a class="btn btn-info" asp-controller="userapp" asp-action="searchBox" data-target="#modal-action-all" data-toggle="modal">
+                    <i class="glyphicon glyphicon-search"></i>
+                    جستجو
+                </a>
+
+
+            </div>
+        </div>
+
+        <hr style="height:1px; background-color:gray;" />
+
+        <div class="box box-body table-responsive no-padding">
+
+            <table class="table table-responsive text-center">
+                <thead>
+                    <tr style="font-size:15px; font-weight:600;">
+                        <td>ردیف</td>
+                        <td>@Html.DisplayNameFor(model => model.firstName)</td>
+                        <td>@Html.DisplayNameFor(model => model.lastName)</td>
+                        <td>@Html.DisplayNameFor(model => model.mobile)</td>
+                        <td>@Html.DisplayNameFor(model => model.type)</td>
+                        <td>@Html.DisplayNameFor(model => model.image)</td>
+
+                        <td>@Html.DisplayNameFor(model => model.dateshamsi)</td>
+                        <td>عملیات</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+
+                    <tr>
+                        <td>
+                            @(row++)
+                            @if (string.IsNullOrEmpty(item.User_id))
+                            {
+
+                                <span class="fa fa-android text-success" title=" توسط اپلیکیشن"></span>
+                            }
+                            else
+                            {
+                                <i class="glyphicon glyphicon-globe text-primary" title="توسط پنل"></i>
+                            }
+                        </td>
+
+
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.firstName))
+                            {
+                                <text>
+                                    @item.firstName
+                                </text>
+                            }
+                            else
+                            {
+                                <text>
+                                    -
+                                </text>
+                            }
+                        </td>
+
+
+
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.lastName))
+                            {
+                                <text>
+                                    @item.lastName
+                                </text>
+                            }
+                            else
+                            {
+                                <text>
+                                    -
+                                </text>
+                            }
+                        </td>
+
+
+                        <td>@item.phone</td>
+                        <td>
+                            @if (item.type == 0)
+                            {
+                               <b>عادی</b>
+                            }
+                            else
+                            {
+                               <b>فروشنده</b>
+                            }
+                        </td>
+
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.image))
+                            {
+                                <img src="~/upload/userAppimage/thumbnailimage/@item.image" class="img-circle" alt="@item.firstName @item.lastName" width="100px" height="100px" />
+                            }
+                            else
+                            {
+                                <img src="~/upload/userAppimage/thumbnailimage/defaultuserImage.png" class="img-circle" alt="@item.firstName @item.lastName" width="100px" height="100px" />
+                            }
+                        </td>
+
+
+                        <td>@item.dateshamsi</td>
+
+                        <td>
+
+                            <a class="btn btn-sm btn-info" asp-controller="UserApp" asp-action="Details" asp-route-id="@item.Id"
+                               data-toggle="modal" data-target="#modal-action-detail-userApp">
+                                <i class="glyphicon glyphicon-info-sign"></i>
+                                جزییات
+                            </a>
+
+                            <a class="btn btn-sm btn-primary" asp-controller="UserApp" asp-action="Edit" asp-route-id="@item.Id">
+                                <i class="glyphicon glyphicon-pencil"></i>
+                                ویرایش
+                            </a>
+
+
+
+                            <a class="btn btn-sm btn-danger" asp-controller="UserApp" asp-action="Delete" asp-route-id="@item.Id"
+                               data-toggle="modal" data-target="#modal-action-delete">
+                                <i class="glyphicon glyphicon-trash"></i>
+                                حذف
+                            </a>
+
+
+
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+@* Paging *@
+@if (ViewBag.PageCount > 1)
+{
+    <div class="row text-center">
+        <nav>
+            <ul class="pagination">
+                @if ((int)ViewBag.PageID > 1)
+                {
+                    @* Previous *@
+                    <li>
+                        <a asp-controller="UserApp" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID - 1)">
+                            <span>&laquo;</span>
+                        </a>
+                    </li>
+                }
+                @for (int i = 1; i <= (ViewBag.PageCount); i++)
+                {
+                    <li class="@(((int)ViewBag.PageID==i)?" active":"")">
+                        <a asp-controller="UserApp" asp-action="Index" asp-route-page="@i">
+                            @i
+                            <span class="sr-only"></span>
+                        </a>
+                    </li>
+                }
+                @if ((int)ViewBag.PageID <= (int)ViewBag.PageCount - 1)
+                {
+                    @* Next *@
+                    <li>
+                        <a asp-controller="UserApp" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID + 1)">
+                            <span>&raquo;</span>
+                        </a>
+                    </li>
+
+                }
+            </ul>
+        </nav>
+    </div>
+
+}
+
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-detail-userApp", Size = ModalSize.Medium })
+@Html.Partial("_Modal", new BootstrapModel  { ID = "modal-action-all", Size = ModalSize.Medium })
+@Html.Partial("_Modal", new BootstrapModel  { ID = "modal-action-delete", Size = ModalSize.Medium })
+
+@section PanelScripts{
+
+    <script src="~/js/modal-js/userApp-index.js"></script>
+    <script src="~/js/modal-js/all-support-index.js"></script>
+
+}

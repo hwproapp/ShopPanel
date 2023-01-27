@@ -1,0 +1,127 @@
+﻿
+
+
+
+<div style="margin-top:20px;">
+
+    <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <div class="small-box bg-aqua">
+            <div class="inner">
+                <h3>0</h3>
+
+                <p>بازدید امروز</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-bag"></i>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <div class="small-box bg-green">
+            <div class="inner">
+                <h3>0</h3>
+
+                <p>بازدید کننده امروز</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <div class="small-box bg-yellow">
+            <div class="inner">
+                <h3>0</h3>
+
+                <p>بازدید کل</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-person-add"></i>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <div class="small-box bg-red">
+            <div class="inner">
+                <h3>0</h3>
+
+                <p>بازدید کننده کل</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="box box-body table-responsive no-padding">
+
+        <table class="table table-responsive text-center">
+            <thead>
+                <tr style="font-size:15px; font-weight:600;">
+                    <td>آی پی کاربر</td>
+                    <td>تاریخ بازدید</td>
+                    <td>تعداد بازدید</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+    @* Paging *@
+    @if (ViewBag.PageCount > 1)
+    {
+        <div class="row text-center">
+            <nav>
+                <ul class="pagination">
+                    @if ((int)ViewBag.PageID > 1)
+                    {
+                        @* Previous *@
+                        <li>
+                            <a href="?page=@((int)ViewBag.PageID-1)">
+                                <span>&laquo;</span>
+                            </a>
+                        </li>
+                    }
+                    @for (int i = 1; i <= (ViewBag.PageCount); i++)
+                    {
+                        <li class="@(((int)ViewBag.PageID==i)?" active":"")">
+                            <a href="?page=@i">
+                                @i
+                                <span class="sr-only"></span>
+                            </a>
+                        </li>
+                    }
+                    @if ((int)ViewBag.PageID <= (int)ViewBag.PageCount - 1)
+                    {
+                        @* Next *@
+                        <li>
+                            <a href="?page=@((int)ViewBag.PageID+1)">
+                                <span>&raquo;</span>
+                            </a>
+                        </li>
+
+                    }
+                </ul>
+            </nav>
+        </div>
+
+    }
+</div>

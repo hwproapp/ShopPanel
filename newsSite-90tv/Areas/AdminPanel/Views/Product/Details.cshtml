@@ -1,0 +1,366 @@
+﻿@model newsSite90tv.Models.ViewModels.productDetailViewModel
+
+@using newsSite90tv.PublicClass
+
+
+@using newsSite90tv.Models.UnitOfWork
+
+@inject IUnitOfWork _context
+
+
+@{
+
+    ViewData["Title"] = "جزییات محصول";
+
+
+
+}
+
+
+<style>
+    .circleInput {
+        border-radius: 3px;
+    }
+
+    #reportbtns a {
+        margin-top: 10px;
+        display: block;
+    }
+
+
+
+    .scroll {
+        overflow: scroll;
+        height: 250px;
+    }
+</style>
+
+
+<div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;height:auto">
+    <div class="col-md-7 col-md-offset-1" style="margin-bottom:5px; margin-top:15px;">
+
+
+        <div class="form-group">
+            <label asp-for="product.title" class="control-label"></label>
+
+            <p>
+                @Model.product.title
+            </p>
+        </div>
+
+        <hr />
+
+        <div class="form-group">
+            <label asp-for="product.shop_id" class="control-label"></label>
+
+            <p>
+                @Model.product.Tbl_Shop.title
+            </p>
+        </div>
+
+        <hr />
+
+        <div class="form-group">
+            <label asp-for="product.cat_id" class="control-label"></label>
+
+            <p>
+                @Model.product.Tbl_Category.Title
+            </p>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            <label asp-for="product.brand_id" class="control-label"></label>
+
+            <p>
+                @Model.product.brand.name |   @Model.product.brand.nameen
+            </p>
+        </div>
+
+
+        <hr />
+
+        <div class="form-group">
+            <label asp-for="product.summary" class="control-label"></label>
+
+            <p class="scroll">
+                @Model.product.summary
+            </p>
+
+        </div>
+
+        <hr />
+
+
+
+        <div class="form-group">
+            <label asp-for="product.desc" class="control-label"></label>
+
+            <p class="scroll">
+                @Model.product.desc
+            </p>
+        </div>
+        <hr />
+
+        <div class="form-group">
+            <label asp-for="product.weight" class="control-label"></label>
+
+            <p>
+                @Model.product.weight
+            </p>
+        </div>
+
+
+        <hr />
+
+        <div class="form-group">
+            <label asp-for="product.price" class="control-label"></label>
+
+            <p>
+                @Model.product.price.ToPrice() تومان
+            </p>
+        </div>
+
+
+        <hr />
+        <div class="form-group">
+            <label asp-for="product.offpercent" class="control-label"></label>
+
+            <p>
+                % @Model.product.offpercent
+            </p>
+
+        </div>
+
+
+        <hr />
+        <div class="form-group">
+            <label asp-for="product.garanty" class="control-label"></label>
+
+            <p>
+                @Model.product.garanty
+            </p>
+        </div>
+
+
+        @*<hr />
+        <div class="form-group">
+            <label asp-for="product.keyword" class="control-label"></label>
+
+            <p>
+                @Model.product.keyword
+            </p>
+        </div>*@
+
+
+        <hr />
+        <div class="form-group">
+            <label asp-for="product.qty" class="control-label"></label>
+
+            <p>
+                @Model.product.qty عدد
+            </p>
+        </div>
+        <hr />
+
+        <div class="form-group">
+            <label asp-for="product.isexist" class="control-label"></label>
+
+            <p>
+                @if (Model.product.isexist)
+                {
+                    <b class="text-success">موجود</b>
+                }
+                else
+                {
+                    <b class="text-danger">ناموجود</b>
+                }
+            </p>
+        </div>
+
+
+
+        <hr />
+
+
+
+
+
+
+        @if (Model.productColor != null && Model.productColor.Count() != 0)
+        {
+
+
+            <div>
+                <label>رنگ بندی انتخابی محصول</label>
+
+                <div>
+                    @foreach (string color in Model.productColor)
+                    {
+                        <button style="background-color:@color" type="button"> &nbsp; </button>
+                    }
+                </div>
+            </div>
+
+        }
+
+        <hr />
+
+        @if (Model.productProperties != null && Model.productProperties.Count() != 0)
+        {
+            <label>خصوصیات محصول</label>
+            <div class="form-group scroll">
+
+
+                <ol class="list-group">
+
+                    @{ foreach (var item in Model.productProperties)
+                        {
+
+                           
+                            <li class="list-group-item">
+
+                                <span class="text-success">@item.Tbl_Properties.name</span> <b> : </b>
+
+                                <button type="button" class="btn btn-sm btn-primary">@item.Tbl_PropertiesValue.value</button>
+
+                            </li>
+                        }
+                    }
+                </ol>
+
+
+            </div>
+        }
+
+
+
+        @if (Model.productSize != null && Model.productSize.Count() != 0)
+        {
+            <label>سایز بندی محصول</label>
+            <div class="form-group scroll">
+
+
+                <ol class="list-group">
+
+                    @{ foreach (var item in Model.productSize)
+                        {
+
+                            <li class="list-group-item">
+                                @item
+                            </li>
+                        }
+                    }
+                </ol>
+
+
+            </div>
+        }
+
+
+
+        <hr />
+        <div class="form-group">
+            <label asp-for="product.status" class="control-label"></label>
+
+
+            <p>
+                @Model.product.status.checkStatus()
+            </p>
+
+        </div>
+
+        <hr />
+
+        <div class="form-group">
+            <label asp-for="product.dateShamsi" class="control-label"></label>
+
+            <p>
+                @Model.product.dateShamsi
+            </p>
+        </div>
+
+
+
+
+
+
+        <hr />
+
+        <div id="reportbtns">
+
+
+
+
+            <a class="btn btn-sm btn-success" asp-controller="Shop" asp-action="Details"
+               asp-route-id="@Model.product.shop_id">
+                <i class="glyphicon glyphicon-check"></i>
+                نمایش فروشنده  این محصول
+            </a>
+
+
+            <a class="btn btn-sm btn-warning" asp-controller="Product" asp-action="productGallary"
+               asp-route-id="@Model.product.Id" data-toggle="modal" data-target="#modal-product-gallary-show">
+                <i class="glyphicon glyphicon-picture"></i>
+                نمایش گالری تصاویر محصول
+            </a>
+
+
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+    <div class="col-md-4" style="margin-top:25px; margin-bottom:25px;">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="box box-widget widget-user">
+                <div class="widget-user-header bg-light-blue-active text-center">
+                    <h3 class="widget-user-username">تصویر شاخص محصول</h3>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+
+                <img id="imguser" class="img-bordered col-md-12 col-xs-12 col-sm-12"
+                     src="~/upload/products/normalimage/@Model.product.image" alt="@Model.product.title"
+                     style="height:300px;" />
+
+                <div style="margin-top:24px">
+                    <span class="glyphicon glyphicon-heart text-danger"></span>
+                    <b>مورد علاقه :@Model.product.likeCount</b>
+                    <span class="glyphicon glyphicon-eye-open text-success"></span>
+                    <b>بازدید : @Model.product.viewCount</b>
+                </div>
+                
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-product-gallary-show", Size = ModalSize.Medium })
+
+
+@section PanelScripts{
+
+    <script src="~/js/modal-js/product-gallary-show.js"></script>
+    
+}

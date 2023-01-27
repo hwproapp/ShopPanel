@@ -1,0 +1,74 @@
+﻿
+@model IEnumerable<FileManager>
+
+@{
+    Layout = null;
+}
+
+<style>
+    
+    .allfiles {
+        display: inline-block;
+        padding: 10px;
+        border: 1px dashed #808080;
+        width: 100%;
+        height: 100%;
+    }
+
+        .allfiles img {
+            border-radius: 5px;
+            width: 100px;
+            height: 100px;
+            margin: 3px;
+        }
+
+    .allfiles {
+        overflow: scroll;
+    }
+
+    .delimg:hover {
+        cursor: pointer;
+    }
+</style>
+
+<form asp-controller="Category" asp-action="Delete" method="post">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">گالری تصاویر</h4>
+    </div>
+
+    <div class="modal-body form-horizontal">
+
+        <div class="allfiles">
+
+            @if (Model != null)
+            {
+                @foreach (var file in Model)
+                {
+
+                    <img src="~/upload/gallaryUp/thumbnailimage/@file.path"  img-id="@file.Id" />
+
+
+                }
+
+            }
+        </div>
+    </div>
+
+
+    <div class="modal-footer" style="text-align:left;">
+        <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+        <button class="btn btn-success" type="button" data-dismiss="modal">صبت</button>
+    </div>
+
+</form>
+
+
+<script>
+    $('.allfiles img').click(function () {
+
+        var id = $(this).attr('img-id');
+
+        $(this).style.backgroundcolor = "red";
+    });
+</script>

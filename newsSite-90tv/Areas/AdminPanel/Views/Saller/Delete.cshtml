@@ -1,0 +1,43 @@
+﻿@model Salsman
+
+@{
+    Layout = null;
+}
+
+<form asp-controller="saller" asp-action="Delete" method="post">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">حذف فروشنده</h4>
+    </div>
+        
+    <div class="modal-body form-horizontal">
+
+        <div class="text-center">
+
+            @if (!string.IsNullOrEmpty(Model.Tbl_Userapp.image))
+
+            {
+                <img src="~/upload/userAppimage/thumbnailimage/@Model.Tbl_Userapp.image" width="100px" height="100px" class="img-circle" alt="@Model.Tbl_Userapp.firstName @Model.Tbl_Userapp.lastName" />
+            }
+            else
+            {
+
+                <img src="~/upload/userAppimage/normalimage/category.png" width="100px"  class="img-circle" height="100px" alt="@Model.Tbl_Userapp.firstName @Model.Tbl_Userapp.lastName" />
+            }
+
+        </div>
+        <br />
+      
+        آیا از حذف فروشنده <strong>@Model.Tbl_Userapp.firstName  @Model.Tbl_Userapp.lastName</strong> مطمئن هستید؟
+
+    </div>
+
+
+    <div class="modal-footer" style="text-align:left;">
+        <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+        <button class="btn btn-danger" type="submit">
+            حذف
+        </button>
+    </div>
+
+</form>

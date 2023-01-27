@@ -1,0 +1,866 @@
+﻿@model newsSite90tv.Models.ViewModels.EditproductViewModel
+@using newsSite90tv.PublicClass
+@{
+    ViewData["Title"] = "ویرایش محصول";
+
+}
+<link href="~/js/TagsInput/bootstrap-tagsinput.css" rel="stylesheet" />
+
+
+<style>
+    img.glimage:hover {
+        transform: scale(4,4)
+    }
+
+    .imageselect > img {
+        margin-right: 10px;
+        border-radius: 5px;
+    }
+
+    .imageselect {
+        width: 100%;
+        overflow: scroll;
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+
+
+    .scroll {
+        overflow: scroll;
+        height: 250px;
+    }
+
+
+    textarea {
+        min-height: 300px;
+        max-height: 300px;
+    }
+</style>
+
+@if (ViewBag.message != null)
+{
+    <div class="alert alert-@ViewBag.type">
+        <span class="close" data-dismiss="alert">&times;</span>
+        @ViewBag.message
+    </div>
+}
+
+<div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;height:auto">
+    <div class="col-md-6 col-md-offset-1" style="margin-bottom:15px; margin-top:15px;">
+        <form asp-area="AdminPanel" asp-controller="Product" asp-action="Edit" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+
+            <input asp-for="product.Id" type="hidden" />
+            <input asp-for="product.dateMiladi" type="hidden" />
+            <input asp-for="product.dateShamsi" type="hidden" />
+            <input asp-for="product.enable" type="hidden" />
+            <input asp-for="product.User_id" type="hidden" />
+            <input asp-for="product.viewCount" type="hidden" />
+            <input asp-for="product.likeCount" type="hidden" />
+            <input asp-for="product.status" type="hidden" />
+            <input asp-for="product.image" type="hidden" />
+            <input asp-for="product.code" type="hidden" />
+            <input asp-for="product.isexist" type="hidden" />
+
+
+
+            <input type="text" class="hidden" id="imagename" name="imagename" />
+
+            <input name="sizes" type="hidden" id="sizes" />
+            <input name="colors" type="hidden" id="colors" />
+            <input name="propids" type="hidden" id="propid" />
+            <input name="propvals" type="hidden" id="propvals" />
+            <input name="trashimages" type="hidden" id="trashimages" />
+
+
+            <div class="form-group">
+                <label asp-for="product.title" class="control-label"></label>
+                <input asp-for="product.title" class="form-control circleInput" placeholder="نام محصول را وارد نمایید" />
+                <span asp-validation-for="product.title" class="text-danger"></span>
+            </div>
+
+
+
+            <div class="form-group">
+                <label class="control-label" asp-for="product.shop_id"></label>
+                <select asp-for="product.shop_id" asp-items="@(new SelectList(Model.shops,"Id","title"))" class="form-control circleInput ostan-select"></select>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="product.summary" class="control-label"></label>
+                <textarea asp-for="product.summary" class="form-control circleInput area" placeholder="شرح مختصر محصول را وارد نمایید"></textarea>
+                <span asp-validation-for="product.summary" class="text-danger"></span>
+            </div>
+
+
+
+            <div class="form-group">
+                <label asp-for="product.desc" class="control-label"></label>
+                <textarea asp-for="product.desc" class="form-control circleInput area" placeholder="شرح کامل محصول را وارد نمایید"></textarea>
+                <span asp-validation-for="product.desc" class="text-danger"></span>
+            </div>
+
+
+
+            <div class="form-group">
+                <label asp-for="product.cat_id" class="control-label"></label>
+                <select asp-for="product.cat_id" asp-items="@(new SelectList(Model.categories,"Id","Title"))" class="form-control circleInput"></select>
+            </div>
+
+
+
+
+            <div class="form-group">
+                <label asp-for="product.brand_id" class="control-label"></label>
+                <select asp-for="product.brand_id" asp-items="@(new SelectList(Model.brands,"Id","name"))" class="form-control circleInput"></select>
+            </div>
+
+
+
+
+            <div class="form-group">
+                <label asp-for="product.price" class="control-label"></label>
+                <input asp-for="product.price" class="form-control circleInput" min="0" placeholder="قیمت محصول را وارد نمایید" />
+                <span asp-validation-for="product.price" class="text-danger"></span>
+            </div>
+
+
+
+            <div class="form-group">
+                <label asp-for="product.offpercent" class="control-label"></label>
+                <input asp-for="product.offpercent" class="form-control circleInput area" min="0" placeholder="تخفیف قیمت محصول را وارد نمایید" />
+                <span asp-validation-for="product.offpercent" class="text-danger"></span>
+            </div>
+
+
+
+            @*<div class="form-group">
+            <label asp-for="product.keyword" class="control-label"></label>
+            <input asp-for="product.keyword"  class="form-control circleInput">
+            <span asp-validation-for="product.keyword" class="text-danger"></span>
+        </div>*@
+
+
+            <div class="form-group">
+                <label asp-for="product.garanty" class="control-label"></label>
+                <input asp-for="product.garanty" class="form-control circleInput">
+                <span asp-validation-for="product.garanty" class="text-danger"></span>
+            </div>
+
+
+
+
+            <div class="form-group">
+                <label asp-for="product.weight" class="control-label"></label>
+                <input asp-for="product.weight" class="form-control circleInput" min="100" placeholder=" وزن محصول را به گرم وارد نمایید" />
+                <span asp-validation-for="product.weight" class="text-danger"></span>
+            </div>
+
+
+
+
+
+            <div class="form-group">
+                <label asp-for="product.qty" class="control-label"></label>
+                <input asp-for="product.qty" class="form-control circleInput area" min="0" placeholder="تعداد محصول را وارد نمایید">
+                <span asp-validation-for="product.qty" class="text-danger"></span>
+            </div>
+
+
+
+
+            @*<div class="form-group">
+            <label asp-for="product.isexist" class="control-label"></label>
+            <input asp-for="product.isexist" class="form-control circleInput area">
+            <span asp-validation-for="product.isexist" class="text-danger"></span>
+        </div>*@
+
+
+
+
+
+            @if (Model.colors != null && Model.colors.Count() != 0)
+            {
+                bool findcolor = false;
+
+                <div class="form-group scroll">
+                    <label class="control-label">رنگ بندی محصول</label>
+                    <ul class="list-group" id="color">
+                        @foreach (var color in Model.colors)
+                        {
+                            foreach (var selectcolor in Model.coloridselect)
+                            {
+                                if (color.Id == selectcolor)
+                                {
+                                    <li class="list-group-item">
+                                        <input type="checkbox" checked value="@color.Id" />
+                                        <text>@color.name</text>
+                                        <button style="background-color:@color.code" type="button">&nbsp;</button>
+                                    </li>
+
+                                    findcolor = true;
+                                    break;
+                                }
+
+                                findcolor = false;
+
+                            }
+
+                            if (!findcolor)
+                            {
+                                <li class="list-group-item">
+                                    <input type="checkbox" value="@color.Id" />
+                                    <text>@color.name</text>
+                                    <button style="background-color:@color.code" type="button">&nbsp;</button>
+                                </li>
+                            }
+                        }
+
+                    </ul>
+                </div>
+
+            }
+
+
+
+
+            <div class="form-group" id="propertysection">
+                <label class="control-label">خصوصیات محصول</label>
+                <p><b class="text-success">توجه :</b> خصوصیاتی که چندین مقدار دارند با علامت <b class="text-danger">( - )</b>   جدا کنید </p>
+                <ul class="list-group props scroll">
+
+                    @if (Model.productproperty != null && Model.productproperty.Count() != 0)
+                    {
+                        @foreach (var item in Model.productproperty)
+                        {
+                            <li class='list-group-item'>
+
+                                <b> @item.name </b>
+                                <input type='text' class='property-val form-control circle-input' prop-id="@item.propertyid" value="@item.value" />
+                            </li>
+                        }
+
+                    }
+
+                </ul>
+
+            </div>
+
+
+
+            <div class="form-group" id="sizesection">
+                <label class="control-label">سایز بندی محصول</label>
+                <ul class="list-group sizes scroll">
+
+                    @if (Model.productsize != null && Model.productsize.Count() != 0)
+                    {
+                        @foreach (var item in Model.productsize)
+                        {
+                            <li class="list-group-item">
+                                <input type='checkbox' class='size-val' checked value="@item.Id" />
+                                <label class="control-label"> @item.name </label>
+                            </li>
+                        }
+                    }
+
+                </ul>
+            </div>
+
+
+
+
+
+
+
+
+
+            <div class="form-group">
+                <label asp-for="product.image" class="control-label"></label>
+                <div class="form-horizontal">
+                    <input asp-for="product.image" type="file" id="files" name="files" />
+                    <input type="button" onclick="UploadImage()" id="btnupload" class="btn btn-info" value="آپلود و نمایش تصویر" />
+                </div>
+                <span asp-validation-for="product.image" class="text-danger"></span>
+            </div>
+
+
+
+
+            <hr />
+
+            <div class="form-group">
+                <div>
+                    <h4 class="text-primary">
+                        تصاویر محصول (گالری) را انتحاب کنید
+                    </h4>
+                    <hr style="background-color:grey" />
+
+                    <div id="prev-image">
+
+                        <h5 class="text-info">
+                            (تصاویر قبلی محصول (گالری
+                        </h5>
+
+                        @if (Model.productGallaries != null && Model.productGallaries.Count() != 0)
+                        {
+                            foreach (var item in Model.productGallaries)
+                            {
+
+                                <div style="display:inline-block;margin-left:10px">
+                                    <img src="~/upload/gallaryUp/normalimage/@item.imagepath" class="img-thumbnail glimage" width="80" height="80" />
+                                    <span class="close del-product-imgs" idimage="@item.Id"> &times;</span>
+                                </div>
+
+
+                            }
+                        }
+
+                    </div>
+                    <hr style="background-color:grey" />
+                    <div class="imageList">
+
+                        <input type="file" name="images" class="load" accept="image/*" onchange="readURL(this)" />
+
+                    </div>
+
+                    <div class="imageselect">
+
+                    </div>
+
+
+                    <div style="margin-top:20px">
+                        <button type="button" id="NewImg" class="btn-sm btn-primary">+اضافه</button>
+                        <button type="button" id="delImg" class="btn-sm btn-danger">- حذف</button>
+                    </div>
+
+                </div>
+
+
+
+
+
+            </div>
+
+            <hr />
+
+
+            <div class="form-group">
+                <div>
+                    <input type="submit" value="ویرایش" class="btn btn-success" />
+                    <a asp-action="Index" class="btn btn-danger">بازگشت</a>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <div class="col-md-4" style="margin-top:25px; margin-bottom:25px;">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="box box-widget widget-user">
+                <div class="widget-user-header bg-light-blue-active text-center">
+                    <h3 class="widget-user-username">تصویر شاخص محصول</h3>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <img id="imguser" class="img-bordered col-md-12 col-xs-12 col-sm-12"
+                     src="~/upload/products/normalimage/@Model.product.image" alt="@Model.product.title"
+                     style="height:300px;" />
+            </div>
+
+
+
+            <div id="divmessage" class="text-center hidden" style="color:green;">
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+</div>
+
+
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-gallary", Size = ModalSize.Medium })
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-all", Size = ModalSize.Medium })
+
+@section PanelScripts{
+    <script src="~/js/modal-js/filemanager-index.js"></script>
+    <script src="~/js/modal-js/all-support-index.js"></script>
+    <script src="~/js/TagsInput/bootstrap-tagsinput.min.js"></script>
+
+    <script type="text/javascript">
+
+        var trashimage = [];
+        var sizes = [];
+        var propid = [];
+        var propvalue = [];
+        var colorid = [];
+
+
+
+        $('.del-product-imgs').click(function () {
+
+            let el = $(this);
+
+            el.parent().remove();
+
+
+
+            trashimage.push(el.attr('idimage'));
+
+            $('#trashimages').val(JSON.stringify(trashimage));
+
+
+        });
+
+
+
+        // file inputes for image loadind product gallary
+        $('#delImg').click(function ()
+        {
+
+            var files = document.getElementsByClassName("load");
+            var imagesuploded = document.getElementsByClassName("uploadimages");
+
+            if (files.length != 0)
+            {
+                files[files.length - 1].remove();
+
+            }
+
+            if (imagesuploded.length != 0) {
+                imagesuploded[imagesuploded.length - 1].remove();
+            }
+
+            if (files.length == 0) {
+                $(this).attr('disabled', 'disabled');
+            }
+
+
+        });
+
+        $('#NewImg').click(function () {
+
+            var el = document.createElement('input');
+            el.setAttribute("type", "file");
+            el.setAttribute("name", "images");
+            el.setAttribute("accept", "image/*");
+            el.setAttribute("class", "load");
+            el.setAttribute("onchange", "readURL(this)");
+
+            $('.imageList').append(el);
+
+           // $('#delImg').removeAttr("disabled");
+
+        });
+
+
+
+        //.......image load
+        function readURL(input)
+        {
+
+            if (input.files && input.files[0]) {
+
+                var reader = new FileReader()
+
+                var img = document.createElement("img");
+
+
+                reader.readAsDataURL(input.files[0]);
+
+                reader.onload = function (e) {
+
+                    img.setAttribute('src', e.target.result);
+                    img.setAttribute("width", "100");
+                    img.setAttribute("height", "100");
+                    img.setAttribute("class", "uploadimages");
+
+                    $(".imageselect").append(img);
+                }
+
+            }
+        }
+
+
+
+         var UploadImage = function () {
+            var data = new FormData;
+            var file = $("#files").get(0);
+            var files = file.files;
+
+            for (var i = 0; i < files.length; i++) {
+                data.append('files', files[i]);
+            }
+
+            $.ajax({
+                type: "post",
+                url: '@Url.Action("UploadFile","Product", new { area = "AdminPanel"})',
+                data: data,
+                contentType: false,
+                processData: false,
+            }).done(function (result) {
+                if (result.status == "success") {
+
+                    $("#imguser").attr('src', "\\upload\\products\\normalimage\\" + result.imagename);
+
+                    $("#divmessage").removeClass('hidden');
+                    $("#divmessage").text("تصویر با موفقیت آپلود شد");
+
+                    $("#imagename").val(result.imagename);
+                    }
+                }).fail(function (result) {
+                    if (result.status != "success") {
+                        $("#divmessage").removeClass('hidden');
+                        $("#divmessage").text("در هنگام آپلود مشکلی رخ داد");
+
+                    }
+                });
+
+        }
+
+
+        //property inputs saved in
+        var propertyinputs = $("input[type='text'].property-val");
+
+        const catchpastproperty =  () =>
+        {
+
+            for (var i = 0; i < propertyinputs.length; i++)
+            {
+                propid.push(propertyinputs[i].getAttribute('prop-id'));
+                propvalue.push(propertyinputs[i].value);
+            }
+
+
+            $('#propid').val(JSON.stringify(propid));
+            $('#propvals').val(JSON.stringify(propvalue));
+
+
+
+        }
+
+
+        function reloadproductsize() {
+            //.........load product size
+
+            var sizechecks = $("ul.sizes li input[type='checkbox']");
+
+            for (var i = 0; i < sizechecks.length; i++) {
+                if (sizechecks[i].hasAttribute("checked")) {
+                    var cid = sizechecks[i].getAttribute('value');
+                    sizes.push(cid)
+                }
+
+            }
+
+
+            // set data to input  hiddewn file
+            $('#sizes').val(JSON.stringify(sizes));
+
+        }
+
+
+        //end fill
+        reloadproductsize();
+        catchpastproperty();
+
+
+        //input property changed event
+        for (var i = 0; i < propertyinputs.length; i++)
+        {
+
+            var el = propertyinputs[i];
+
+            el.onchange = function ()
+            {
+                let id = $(this).attr('prop-id');
+                let index = propid.indexOf(id);
+
+                if (index != -1) {
+                    propid.splice(index, 1);
+                    propvalue.splice(index, 1);
+                }
+
+
+                propvalue.push($(this).val());
+                propid.push(id)
+
+                $('#propid').val(JSON.stringify(propid));
+                $('#propvals').val(JSON.stringify(propvalue));
+
+
+
+
+
+            }
+        }
+
+
+
+        $('#product_keyword').tagsinput();
+
+
+
+        //check property is empty
+        if (propid.length == 0)
+        {
+            getproductproperty($('#product_cat_id').val());
+
+        }
+
+
+          //check product size is empty
+        if (sizes.length == 0) {
+            getproductsize($('#product_cat_id').val());
+        }
+
+
+
+        // categpty type changed refresh property
+        $('#product_cat_id').change(function()
+        {
+
+
+            sizes = [];
+            propid = [];
+            propvalue = [];
+
+
+            var id = $(this).val();
+
+            getproductproperty(id);
+            getproductsize(id);
+
+        });
+
+
+
+
+        function getproductproperty(id) {
+
+            $.ajax
+            ({
+                type: "Get",
+                url: '@Url.Action("GetPropertyByCategory", "property", new { area = "AdminPanel"})',
+                 data:{ catid : id } ,
+
+                 success: (res) =>
+                 {
+
+
+                     if (res.length == 0) {
+
+                         $('#propertysection').slideUp();
+                         return;
+                     }
+
+                     $('#propertysection').slideDown();
+                     var out = "";
+
+                     for (var i = 0; i < res.length; i++)
+                     {
+                         out += "<li class='list-group-item'><b>" + res[i].name + "</b>" +
+                               "<input type='text'  class='property-val form-control circle-input' prop-id=" + res[i].id + "  /></li >";
+
+
+                     }
+
+
+                     $('.props').html(out);
+
+
+
+                     //input property changed event
+                     for (var i = 0; i < propertyinputs.length; i++) {
+
+                         var el = propertyinputs[i];
+
+                         el.onchange = function () {
+
+
+                             let id = $(this).attr('prop-id');
+
+
+                             propvalue.push($(this).val());
+                             propid.push(id)
+
+                             $('#propid').val(JSON.stringify(propid));
+                             $('#propvals').val(JSON.stringify(propvalue));
+
+
+
+
+
+                         }
+                     }
+
+
+                 }, error: (er) => {
+                     alert(" خطا در دریافت اطلاعات" + er.message);
+                 }
+
+            });
+
+
+
+
+        }
+
+
+
+        //....get size by category
+        function getproductsize(id)
+        {
+            $.ajax
+            ({
+                 type: "Get",
+                 url: '@Url.Action("GetSizeByCategory", "productsize", new { area = "AdminPanel"})',
+                 data:{ catid : id } ,
+
+                  success: (res) =>
+                 { 
+
+                     if (res.length == 0) {
+
+                         $('#sizesection').slideUp();
+                         return;
+                     }
+
+                     $('#sizesection').slideDown();
+
+                     var out = "";
+                     for (var i = 0; i < res.length; i++)
+                     {
+
+                         out += "<li class='list-group-item'>"+
+                               "<input type='checkbox' class='size-val'  value=" +res[i].id +" /> &nbsp"
+                             + "<lable class='control-lable'>" + res[i].name + "<lable>" +
+                               "</li > ";
+
+                     }
+
+
+                     $('.sizes').html(out);
+
+                     var inputs = $('.size-val');
+
+                     for (var i = 0; i < inputs.length; i++) {
+
+                         //get single checkbox
+                         var el = inputs[i];
+
+
+                          //get checkbox value
+
+
+                         // checkbox change evevnt
+                         el.onchange = function ()
+
+                         {
+                             let id = $(this).val();
+
+                             if ($(this).is(":checked")) {
+
+
+                                 sizes.push(id)
+
+
+
+                             } else
+                             {
+
+                                 let c = sizes.indexOf(id);
+
+                                 sizes.splice(c, 1);
+
+
+
+                             }
+
+
+                             $('#sizes').val(JSON.stringify(sizes));
+
+                         }
+                     }
+
+
+
+
+                 }, error: (er) => {
+                    alert( "خطا  : " + er.message);
+                 }
+
+            });
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+        // product color checkbox changed
+       
+
+        var colorchecks = $("ul#color li input[type='checkbox']");
+        for (var i = 0; i < colorchecks.length; i++) {
+            if (colorchecks[i].hasAttribute("checked")) {
+                var cid = colorchecks[i].getAttribute('value');
+                colorid.push(cid)
+
+            }
+
+
+        }
+
+        $('#colors').val(JSON.stringify(colorid));
+
+
+
+        $("ul#color  li input[type='checkbox']").change(function () {
+            var id = $(this).val();
+
+            if ($(this).is(":checked")) {
+                colorid.push(id)
+            } else {
+                let c = colorid.indexOf(id);
+
+                colorid.splice(c, 1);
+
+            }
+
+            $('#colors').val(JSON.stringify(colorid));
+
+
+        });
+
+
+
+
+
+    </script>
+}
+

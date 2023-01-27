@@ -1,0 +1,164 @@
+﻿@model newsSite90tv.Models.ViewModels.sellerDetailViewModel
+
+@using newsSite90tv.PublicClass
+@{
+    Layout = null;
+}
+
+<style>
+    a {
+        cursor: pointer;
+    }
+
+
+    .profile {
+        text-align: center;
+        margin-bottom: 10px;
+        padding: 5px;
+        background-color: #c0faea;
+        border-radius: 10px;
+    }
+
+        .profile p {
+            margin-top: 5px;
+        }
+
+        .profile img {
+            box-shadow: 3px 3px 3px 3px #808080;
+            width: 150px;
+            height: 150px;
+        }
+</style>
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">جزییات فروشنده</h4>
+</div>
+
+<div class="modal-body form-horizontal">
+
+    <div class="profile">
+
+        <img src="~/upload/userAppimage/normalimage/@Model.seller.Tbl_Userapp.image" class="img-circle" alt="@Model.seller.Tbl_Userapp.firstName @Model.seller.Tbl_Userapp.lastName" />
+
+        <p>
+            @Model.seller.Tbl_Userapp.firstName   @Model.seller.Tbl_Userapp.lastName
+        </p>
+
+    </div>
+
+    @if (Model != null && Model.seller != null)
+    {
+        <ul class="list-group">
+
+            <li class="list-group-item">
+                <label> شماره تلفن  </label>
+                @Model.seller.Tbl_Userapp.phone
+            </li>
+
+            <li class="list-group-item">
+                <label> شماره همراه</label>
+                @Model.seller.Tbl_Userapp.mobile
+            </li>
+
+            <li class="list-group-item">
+                <label>ایمیل</label>
+                @Model.seller.Tbl_Userapp.email
+            </li>
+
+
+
+            <li class="list-group-item">
+                وضیعت
+                @if (Model.seller.status == 1)
+                {
+                    <b>تایید شده</b>
+                }
+                else
+                {
+                    <b>تایید نشده</b>
+                }
+            </li>
+
+        </ul>
+
+        @if (Model.bankinfo != null && Model.bankinfo.Count() != 0)
+        {
+            <div>
+                اطلاعات بانکی 
+                <button class="btn btn-block" id="mdetail">بیشتر + </button>
+            </div>
+
+            <div id="more">
+
+                <ul class="list-group">
+
+                    @foreach (var info in Model.bankinfo)
+                    {
+
+                        <li class="list-group-item">
+                            <label asp-for="@info.owner"></label>
+                            @info.owner
+                        </li>
+                        <li class="list-group-item">
+                            <label asp-for="@info.bankname"></label>
+                            @info.bankname
+                        </li>
+
+                        <li class="list-group-item">
+                            <label asp-for="@info.BankNom"></label>
+                            @info.BankNom
+                        </li>
+
+                        <li class="list-group-item">
+                            <label asp-for="@info.shabNom"></label>
+                            @info.shabNom
+                        </li>
+
+                        <li class="list-group-item">
+                            <label asp-for="@info.dateShamsi"></label>
+                            @info.dateShamsi
+                        </li>
+
+
+
+                        <li class="list-group-item">
+                            <label asp-for="@info.status"></label>
+                            @info.status.checkStatus()
+                        </li>
+
+                        <li class="list-group-item">
+                             ---------------------------
+                        </li>
+                    }
+
+
+
+                </ul>
+
+            </div>
+        }
+
+
+    }
+
+</div>
+
+
+<div class="modal-footer" style="text-align:left;">
+    <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+</div>
+
+
+
+<script>
+    $('#more').hide();
+    $('#mdetail').click(function () {
+
+       
+        $('#more').slideToggle();
+
+        
+
+    })
+</script>

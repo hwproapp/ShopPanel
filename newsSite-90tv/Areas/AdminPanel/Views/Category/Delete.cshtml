@@ -1,0 +1,36 @@
+﻿@model newsSite90tv.Models.Category
+
+@{
+    Layout = null;
+}
+
+<form asp-controller="Category" asp-action="Delete" method="post">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">حذف دسته بندی</h4>
+    </div>
+        
+    <div class="modal-body form-horizontal">
+        آیا از حذف دسته بندی <strong>@Model.Title</strong> مطمئن هستید؟
+        @if (Model.image != "category.png")
+        {
+            <img src="~/upload/category/thumbnailimage/@Model.image" width="80" height="80" alt="@Model.Title" />
+        }
+        else
+        {
+            <b>تصویر پیش فرض</b>
+            <img src="~/upload/category/normalimage/category.png" width="80" height="80" alt="@Model.Title" />
+        }
+        <br /><br />
+        <p class="alert alert-danger">تمام دسته های زیرین حذف خواهد شد</p>
+    </div>
+
+
+    <div class="modal-footer" style="text-align:left;">
+        <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+        <button class="btn btn-danger" type="submit">
+            حذف
+        </button>
+    </div>
+
+</form>

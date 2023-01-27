@@ -1,0 +1,168 @@
+﻿@model Appsetting
+
+@using newsSite90tv.PublicClass
+
+@{
+    ViewData["Title"] = "تنظیمات اپلیکیشن";
+
+
+}
+
+
+
+<style>
+
+    .circleInput {
+        border-radius: 3px;
+    }
+</style>
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-@TempData["type"]">
+        <span class="close" data-dismiss="alert">&times;</span>
+        @TempData["message"]
+    </div>
+}
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="panel panel-primary col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+
+        <div class="panel-body">
+            <div>
+
+
+                @if (Model == null)
+                {
+                    <a class="btn btn-info" asp-controller="appsetting" asp-action="Create">
+                        <i class="glyphicon glyphicon-plus-sign"></i>
+                        افزودن
+                    </a>
+                }
+
+
+                @if (Model != null)
+                {
+                    <a class="btn btn-primary" asp-controller="appsetting" asp-action="Edit" asp-route-Id="@Model.Id">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                        ویرایش
+                    </a>
+
+
+                    <a class="btn btn-danger " asp-controller="appsetting" asp-action="Delete" asp-route-Id="@Model.Id" data-toggle="modal" data-target="#modal-action-all">
+                        <i class="glyphicon glyphicon-trash"></i>
+                        حذف
+                    </a>
+                }
+
+            </div>
+
+        </div>
+        <hr />
+
+
+
+        @if (Model != null)
+        {
+
+            <div class="alert alert-info">
+                <span class="glyphicon glyphicon-info-sign"></span>
+                پیشنهاد سیستم : بهتر است تنظیمات مورد نظر خود را بعد از ایجاد <b class="text-danger">حذف</b> نکنید و فقط <b class="text-success">ویرایش</b> کنید
+            </div>
+
+            <h3><b class="text-danger">*</b>تنظیمات عمومی اپلیکیشن</h3>
+            <hr />
+            <div class="form-group">
+                <label asp-for="about"></label>
+                <p class="text-justify">
+                    @Model.about
+                </p>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="email"></label>
+                <p class="text-justify">
+                    @Model.email
+                </p>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="phone"></label>
+                <p class="text-justify">
+                    @Model.phone
+                </p>
+            </div>
+
+
+            <hr />
+
+
+            <h3><b class="text-danger">*</b>اطلاعات بانکی شما</h3>
+            <hr />
+
+            <div class="alert alert-info">
+                <span class="glyphicon glyphicon-info-sign"></span>
+                اطلاعات بانکی شما در جهت تسویه با فروشندگان مورد نظر  مورد استفاده قرار میگیرد. فایل اکسل پایا
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ownername"></label>
+                <p class="text-justify">
+                    @Model.ownername
+                </p>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="shabacode"></label>
+                <p class="text-justify">
+                    @Model.shabacode
+                </p>
+            </div>
+
+            <hr />
+
+
+            <h3><b class="text-danger">*</b>بخش فروش و کارمزد برنامه</h3>
+            <hr />
+
+            <div class="alert alert-info">
+                <span class="glyphicon glyphicon-info-sign"></span>
+                . شما در این بخش مشحص می کنید که درصد کارمزد برنامه (شما) از فروش فروشنده چقدر است.
+            </div>
+
+            <div class="form-group">
+                <label asp-for="wage"></label>
+                <p class="text-justify">
+                    @Model.wage%
+                </p>
+            </div>
+
+            <hr />
+        }
+        else
+        {
+
+            <div class="alert alert-info">
+                <span class="glyphicon glyphicon-info-sign"></span>
+                در حال حاضر پیشنهادی وجود ندارد
+            </div>
+        }
+
+
+    </div>
+</div>
+
+
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-all", Size = ModalSize.Large })
+
+@section PanelScripts{
+
+
+    <script src="~/js/modal-js/all-support-index.js"></script>
+
+
+
+
+}

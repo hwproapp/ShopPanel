@@ -1,0 +1,81 @@
+﻿@model Appversion  
+
+
+@{
+    Layout = null;
+}
+
+
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">جزییات ورژن اپلیکیشن</h4>
+</div>
+
+
+
+<div class="modal-body form-horizontal">
+
+    <ul class="list-group">
+
+
+        <li class="list-group-item">
+            <label asp-for="versionCode" class="control-label"></label>
+            @Model.versionCode
+        </li>
+
+
+        <li class="list-group-item">
+            <label asp-for="versionName" class="control-label"></label>
+            @Model.versionName
+        </li>
+
+       
+
+        <li class="list-group-item">
+            <label class="control-label">وضیعت ورژن</label>
+            @if (Model.status == 1)
+            {
+                <b class="text-success">
+                    (ورژن جدید)منتشر شده
+                </b>
+            }
+            else
+            {
+                <b class="text-info">
+                    (ورژن قدیم) بسته شده
+                </b>
+            }
+        </li>
+
+
+        <li class="list-group-item">
+            <label asp-for="dateShamsi" class="control-label"></label>
+            @Model.dateShamsi
+        </li>
+
+
+        <li class="list-group-item">
+            <label asp-for="link" class="control-label"></label>
+            <a href="@Model.link" target="_blank" class="btn btn-default">
+                <span class="glyphicon glyphicon-link"></span>
+                برو به ادرس
+            </a>
+
+         
+        </li>
+
+
+        <li class="list-group-item">
+            <label asp-for="desc" class="control-label"></label>
+            @Model.desc
+        </li>
+
+    </ul>
+
+
+    <div class="modal-footer" style="text-align:left;">
+        <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+    </div>
+
+</div>

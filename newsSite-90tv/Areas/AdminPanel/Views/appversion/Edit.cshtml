@@ -1,0 +1,115 @@
+﻿@model Appversion
+
+
+@{
+    ViewData["Title"] = "ویرایش تنظیمات ورژن اپلیکیشن";
+}
+
+
+
+@if (ViewBag.message != null)
+{
+    <div class="alert alert-@ViewBag.type">
+        <span class="close" data-dismiss="alert">&times;</span>
+        @ViewBag.message
+    </div>
+}
+
+<div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="col-md-6 col-md-offset-2" style="margin-bottom:15px; margin-top:15px;">
+
+
+
+        <form asp-area="AdminPanel" asp-controller="appversion" asp-action="Edit" method="post">
+
+
+            <input asp-for="versionCode" type="hidden"/>
+            <input asp-for="dateShamsi" type="hidden"/>
+            <input asp-for="dateMiladi" type="hidden"/>
+            <input asp-for="Id" type="hidden"/>
+            <input asp-for="status" type="hidden"/>
+            <input asp-for="isEnable" type="hidden"/>
+
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+
+          
+
+
+            <div class="form-group">
+                <label asp-for="versionName" class="control-label"></label>
+                <input asp-for="versionName" class="form-control circleInput area" placeholder="نام  ورژن اپلیکیشن را وارد نمایید" />
+                <span asp-validation-for="versionName" class="text-danger"></span>
+            </div>
+
+
+
+            <div class="form-group">
+                <label asp-for="desc" class="control-label"></label>
+                <textarea asp-for="desc" class="form-control circleInput area" placeholder="توضیحات  ورژن اپلیکیشن را وارد نمایید"></textarea>
+                <span asp-validation-for="desc" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="link" class="control-label"></label>
+                <textarea asp-for="link" class="form-control circleInput area" placeholder="لینک دانلود اپلیکیشن را وارد نمایید"></textarea>
+                <span asp-validation-for="link" class="text-danger"></span>
+            </div>
+
+
+
+            <div class="form-group">
+                <input type="submit" value="ویرایش" class="btn btn-success" id="btnsubmit" />
+                <a asp-action="Index" class="btn btn-danger">بازگشت</a>
+            </div>
+
+
+
+
+        </form>
+
+    </div>
+
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="MyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"> اطلاعات </h4>
+            </div>
+            <div class="modal-body" id="MyModalBody">
+
+            </div>
+
+            <div class="modal-footer" style="text-align:left;">
+                <button class="btn btn-primary" type="button" data-dismiss="modal">برگشت</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Modal -->
+
+
+
+
+@section PanelScripts{
+    }
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,202 @@
+﻿@model IEnumerable<Checkout>
+
+@using newsSite90tv.Models.UnitOfWork
+
+
+@using newsSite90tv.PublicClass
+
+@{
+    ViewData["Title"] = "واریز های من";
+
+    int row = 1;
+}
+
+@inject IUnitOfWork _context
+
+<style>
+
+    .circleInput {
+        border-radius: 3px;
+    }
+</style>
+
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-@TempData["type"]">
+        <span class="close" data-dismiss="alert">&times;</span>
+        @TempData["message"]
+    </div>
+}
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="panel panel-primary col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+
+
+
+
+
+        @if (Model != null && Model.Count() != 0)
+        {
+            <div class="box box-body table-responsive no-padding">
+
+                <table class="table table-responsive text-center">
+                    <thead>
+                        <tr style="font-size:15px; font-weight:600;">
+
+                           
+
+                            <td>ردیف</td>
+                           
+                            <td>@Html.DisplayNameFor(m => m.shop_id)</td>
+                            <td>@Html.DisplayNameFor(m => m.seller_id)</td>
+                            <td>@Html.DisplayNameFor(m => m.checkoutprice)</td>
+                            <td>@Html.DisplayNameFor(m => m.Tbl_sellerBank.owner)</td>
+                            <td>@Html.DisplayNameFor(m => m.Tbl_sellerBank.bankname)</td>
+                            <td>@Html.DisplayNameFor(m => m.Tbl_sellerBank.BankNom)</td>
+                            <td>@Html.DisplayNameFor(m => m.Tbl_sellerBank.shabNom)</td>
+                            <td>@Html.DisplayNameFor(m => m.dateshamsi)</td>
+                            @*<td>عملیات</td>*@
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            var userseller = _context.userappRepositoryUW.GetById(item.Tbl_Salsman.appuser_id);
+
+                            <tr>
+
+                                @*<td>
+                                    <input type="checkbox" value="@item.Id" class="check-fix" />
+                                </td>*@
+
+                                <td>
+                                    @(row++)
+                                </td>
+
+
+                                <td>
+                                    <a class="btn btn-sm btn-info" asp-controller="shop" asp-action="Details" asp-route-id="@item.shop_id">
+                                        @item.Tbl_Shop.title
+                                    </a>
+
+
+
+
+                                </td>
+                                <td>
+
+                                    <a class="btn btn-sm btn-info" asp-controller="Saller" asp-action="Details" asp-route-id="@item.seller_id"
+                                       data-toggle="modal" data-target="#model-seller-details">
+                                        @userseller.firstName @userseller.lastName
+                                    </a>
+
+                                </td>
+
+                                <td class="text-bold text-success">
+
+                                    @item.checkoutprice.RialToToman().ToPrice() تومان
+                                </td>
+
+                                <td>
+                                    @item.Tbl_sellerBank.owner
+                                </td>
+
+                                <td class="text-bold">
+                                    @item.Tbl_sellerBank.bankname
+                                </td>
+
+                                <td class="text-bold">
+                                    @item.Tbl_sellerBank.BankNom
+                                </td>
+
+
+                                <td class="text-bold">
+                                    @item.Tbl_sellerBank.shabNom
+                                </td>
+
+
+                                <td>
+                                    @item.dateshamsi
+                                </td>
+                            </tr>
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info">
+                واریزی وجود ندارد
+            </div>
+        }
+
+    </div>
+
+</div>
+
+
+
+
+@* Paging *@
+@if (ViewBag.PageCount > 1)
+{
+    <div class="row text-center">
+        <nav>
+            <ul class="pagination">
+                @if ((int)ViewBag.PageID > 1)
+                {
+                    @* Previous *@
+                    <li>
+                        <a asp-controller="checkout" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID - 1)" asp-route-q="@ViewBag.q">
+                            <span>&laquo;</span>
+                        </a>
+                    </li>
+                }
+                @for (int i = 1; i <= (ViewBag.PageCount); i++)
+                {
+                    <li class="@(((int)ViewBag.PageID==i)?" active":"")">
+                        <a asp-controller="checkout" asp-action="Index" asp-route-page="@i" asp-route-q="@ViewBag.q">
+                            @i
+                            <span class="sr-only"></span>
+                        </a>
+                    </li>
+                }
+                @if ((int)ViewBag.PageID <= (int)ViewBag.PageCount - 1)
+                {
+                    @* Next *@
+                    <li>
+                        <a asp-controller="checkout" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID + 1)" asp-route-q="@ViewBag.q">
+                            <span>&raquo;</span>
+                        </a>
+                    </li>
+
+                }
+            </ul>
+        </nav>
+    </div>
+
+}
+
+
+
+
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "model-seller-details", Size = ModalSize.Medium })
+
+
+@section PanelScripts{
+
+    <script src="~/js/modal-js/all-support-index.js"></script>
+
+
+
+
+
+}
+
+

@@ -1,0 +1,129 @@
+﻿
+@using newsSite90tv.Models.UnitOfWork;
+
+@model newsSite90tv.Models.ViewModels.EditUserViewModel
+
+@inject IUnitOfWork _conx
+
+@{
+
+    ViewData["Title"] = "جزییات کاربر";
+    Layout = null;
+
+}
+
+
+<style>
+    .circleInput {
+        border-radius: 3px;
+    }
+
+    .profile {
+        text-align: center;
+        margin-bottom: 10px;
+        padding: 5px;
+        background-color: #c0faea;
+        border-radius: 10px;
+    }
+
+        .profile p {
+            margin-top: 5px;
+        }
+
+   
+    .profile img {
+        box-shadow: 3px 3px 3px 3px #808080;
+        width: 150px;
+        height: 150px;
+    }
+</style>
+
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">جزییات کاربر سیستم</h4>
+</div>
+
+<div class="modal-body form-horizontal">
+
+
+    <div class="text-center profile">
+
+        @if (!string.IsNullOrEmpty(Model.UserImage))
+        {
+            <img src="~/upload/userimage/normalimage/@Model.UserImage" class="img-circle" alt="@Model.FirstName @Model.LastName" />
+        }
+        else
+        {
+            <img src="~/upload/userimage/normalimage/defaultuserImage.png" class="img-circle" alt="@Model.FirstName @Model.LastName" />
+        }
+        <p>
+            @Model.FirstName @Model.LastName
+        </p>
+    </div>
+
+
+    <ul class="list-group">
+
+        <li class="list-group-item">
+            <p>
+                <label asp-for="FirstName" class="control-label"></label>
+                @Model.FirstName
+            </p>
+        </li>
+
+        <li class="list-group-item">
+            <p>
+                <label asp-for="LastName" class="control-label"></label>
+
+                @Model.LastName
+            </p>
+        </li>
+
+        <li class="list-group-item">
+            <p>
+                <label asp-for="FirstName" class="control-label"></label>
+                @Model.FirstName
+            </p>
+        </li>
+
+        <li class="list-group-item">
+            <p>
+                <label asp-for="gender" class="control-label"></label>
+                @(Model.gender == 1 ? "آقا" : "خانم")
+            </p>
+        </li>
+
+        <li class="list-group-item">
+            <p>
+                <label asp-for="PhoneNumber" class="control-label"></label>
+
+                @Model.PhoneNumber
+            </p>
+        </li>
+
+        <li class="list-group-item">
+            <p>
+                <label asp-for="Email" class="control-label"></label>
+                @Model.Email
+            </p>
+        </li>
+        
+        <li class="list-group-item">
+            <p>
+                <label asp-for="BirthDayDate" class="control-label"></label>
+                @Model.BirthDayDate
+            </p>
+        </li>
+    </ul>
+
+  
+</div>
+
+
+<div class="modal-footer" style="text-align:left;">
+    <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+</div>
+
+
+

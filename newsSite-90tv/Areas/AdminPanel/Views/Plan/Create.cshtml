@@ -1,0 +1,129 @@
+﻿
+@model Plan
+
+@{
+    ViewData["Title"] = "افزودن پلن";
+
+}
+
+
+<style>
+    .circleInput {
+        border-radius: 3px;
+    }
+</style>
+
+@if (ViewBag.message != null)
+{
+    <div class="alert alert-@ViewBag.type">
+        <span class="close" data-dismiss="alert">&times;</span>
+        @ViewBag.message
+    </div>
+}
+
+<div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="col-md-6 col-md-offset-2" style="margin-bottom:15px; margin-top:15px;">
+        <form asp-area="AdminPanel" asp-controller="Plan" asp-action="Create" method="post">
+
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+            <div class="form-group">
+                <label asp-for="namefa" control-label"></label>
+                <input asp-for="namefa" class="form-control circleInput" placeholder="نام فارسی پلن را وارد نمایید" />
+                <span asp-validation-for="namefa" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="nameen" control-label"></label>
+                <input asp-for="nameen" class="form-control circleInput" placeholder="نام انگلیسی پلن را وارد نمایید" />
+                <span asp-validation-for="nameen" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="desc" control-label"></label>
+                <input asp-for="desc" class="form-control circleInput" placeholder="توضیحات پلن را وارد نمایید" />
+                <span asp-validation-for="count" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="plantype" class="control-label"></label>
+                <select asp-for="plantype" class="form-control circleInput ct-types">
+                    <option value="0">
+                        روزانه
+                    </option>
+
+                    <option value="1">
+                        ماهانه
+                    </option>
+
+
+                    <option value="2">
+                        سالانه
+                    </option>
+                </select>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="count" control-label"></label>
+                <input asp-for="count" class="form-control circleInput" placeholder="مدت پلن را وارد نمایید" />
+                <span asp-validation-for="count" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="price" control-label"></label>
+                <input asp-for="price" class="form-control circleInput" placeholder="قیمت پلن را وارد نمایید" />
+                <span asp-validation-for="price" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="offpercent" control-label"></label>
+                <input asp-for="offpercent" class="form-control circleInput" placeholder="تخفیف قیمت پلن را وارد نمایید" />
+                <span asp-validation-for="price" class="text-danger"></span>
+            </div>
+
+
+
+           <div class="form-group">
+                <label asp-for="type" class="control-label"></label>
+                <select asp-for="type" class="form-control circleInput ct-types">
+
+                    <option value="0">
+                      فعال سازی  فروشگاه 
+                    </option>
+
+                    <option value="1">
+                        تبلیغ قروشگاه
+                    </option>
+
+                </select>
+            </div>
+
+
+
+            <div class="form-group">
+                <input type="submit" value="ایجاد" class="btn btn-success" />
+                <a asp-action="Index" class="btn btn-danger">بازگشت</a>
+            </div>
+
+
+
+        </form>
+
+    </div>
+
+   
+
+</div>
+
+
+
+
+
+

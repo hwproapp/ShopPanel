@@ -1,0 +1,373 @@
+﻿@model newsSite90tv.Models.ViewModels.CreateBannerViewModel
+
+@using newsSite90tv.PublicClass
+@{
+    ViewData["Title"] = "افزودن اگهی اشتغال";
+
+}
+
+
+
+
+<style>
+    .circleInput {
+        border-radius: 3px;
+    }
+
+    .area {
+        min-width: 550px;
+        min-height: 124px;
+        max-width: 386px;
+        max-height: 124px;
+    }
+
+
+    .imageselect > img {
+        margin-right: 10px;
+        border-radius: 5px;
+    }
+
+    .imageselect {
+        width: 100%;
+        overflow: scroll;
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+</style>
+
+
+
+
+
+@if (ViewBag.message != null)
+{
+    <div class="alert alert-@ViewBag.type">
+        <span class="close" data-dismiss="alert">&times;</span>
+        @ViewBag.message
+    </div>
+}
+
+<div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="col-md-6 col-md-offset-2" style="margin-bottom:15px; margin-top:15px;">
+
+
+
+        <form asp-area="AdminPanel" asp-controller="banner" asp-action="create" method="post" enctype="multipart/form-data">
+
+
+
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+            <div class="form-group">
+                <label asp-for="banner.appuser_id" class="control-label"></label>
+                <select asp-for="banner.appuser_id" asp-items="@(new SelectList(Model.appusers,"id","fullname"))" class="form-control circleInput"></select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="banner.title" class="control-label"></label>
+                <input asp-for="banner.title" class="form-control circleInput" placeholder="عنوان آگهی را وارد نمایید" />
+                <span asp-validation-for="banner.title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="banner.desc" class="control-label"></label>
+                <textarea asp-for="banner.desc" class="form-control circleInput area" placeholder="توضیحات آگهی را وارد نمایید"></textarea>
+                <span asp-validation-for="banner.desc" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="banner.category_id" class="control-label"></label>
+                <select asp-for="banner.category_id" asp-items="@(new SelectList(Model.category,"Id","Title"))" class="form-control circleInput"></select>
+            </div>
+
+
+            <div class="form-group">
+                <label class="control-label">استان</label>
+                <select asp-for="banner.ostan_id" asp-items="@(new SelectList(Model.ostan,"Id","title"))" class="form-control circleInput ostan-select">
+                    <option>---استان خود را انتخاب کنید---</option>
+
+                </select>
+            </div>
+
+            <div class="form-group city">
+                <label class="control-label"></label>
+
+            </div>
+
+
+
+
+
+            @* تصویر *@
+
+            <div class="form-group">
+                <label asp-for="banner.image" class="control-label"></label>
+                <div class="form-horizontal">
+                    <input asp-for="banner.image" type="file" id="files" name="files" />
+                    <input type="button" onclick="UploadImage()" id="btnupload" class="btn btn-info" value="آپلود و نمایش تصویر" />
+                </div>
+                <span asp-validation-for="banner.image" class="text-danger"></span>
+            </div>
+
+
+
+
+            <input type="text" class="hidden" id="imagename" name="imagename" />
+
+
+
+            @* گالری تصاویر *@
+
+            <div class="form-group">
+
+                <label class="control-label">گالری تصاویر  آگهی</label>
+                <div class="imageList">
+                    <input type="file" name="images" class="load" accept="image/*" onchange="readURL(this)" />
+
+
+                </div>
+
+
+                <div class="imageselect">
+
+                </div>
+
+                <div style="margin-top:20px">
+                    <button type="button" id="NewImg" class="btn-sm btn-primary">+اضافه</button>
+                    <button type="button" id="delImg" class="btn-sm btn-danger">- حذف</button>
+                </div>
+
+            </div>
+
+
+
+
+            <div class="form-group">
+                <input type="submit" value="ایجاد" class="btn btn-success" id="btnsubmit" />
+                <a asp-action="Index" class="btn btn-danger">بازگشت</a>
+            </div>
+
+
+
+        </form>
+
+    </div>
+
+
+
+    <div class="col-md-4" style="margin-top:25px; margin-bottom:25px;">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="box box-widget widget-user">
+                <div class="widget-user-header bg-light-blue-active text-center">
+                    <h3 class="widget-user-username">تصویر شاخص آگهی</h3>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <img id="imguser" class="img-bordered col-md-12 col-xs-12 col-sm-12"
+                     src="~/upload/banners/normalimage/nopicture.png" alt="UsserImage"
+                     style="height:300px;" />
+            </div>
+
+
+            <div id="divmessage" class="text-center hidden" style="color:green;">
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="MyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"> اطلاعات </h4>
+            </div>
+            <div class="modal-body" id="MyModalBody">
+
+            </div>
+
+            <div class="modal-footer" style="text-align:left;">
+                <button class="btn btn-primary" type="button" data-dismiss="modal">برگشت</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Modal -->
+
+
+
+
+@section PanelScripts
+{
+
+    <script>
+
+    var UploadImage = function ()
+    {
+            var data = new FormData;
+            var file = $("#files").get(0);
+            var files = file.files;
+
+            for (var i = 0; i < files.length; i++) {
+                data.append('files', files[i]);
+            }
+
+            $.ajax({
+                type: "post",
+                url: '@Url.Action("UploadFile","banner", new { area = "AdminPanel"})',
+                data: data,
+                contentType: false,
+                processData: false,
+            }).done(function (result) {
+                if (result.status == "success") {
+
+                    $("#imguser").attr('src', "\\upload\\banners\\normalimage\\" + result.imagename);
+
+                    $("#divmessage").removeClass('hidden');
+                    $("#divmessage").text("تصویر با موفقیت آپلود شد");
+
+                    $("#imagename").val(result.imagename);
+                    }
+                }).fail(function (result) {
+                    if (result.status != "success") {
+                        $("#divmessage").removeClass('hidden');
+                        $("#divmessage").text("در هنگام آپلود مشکلی رخ داد");
+
+                    }
+                });
+
+        }
+
+
+
+
+
+        $('#delImg').click(function () {
+
+
+            var files = document.getElementsByClassName("load");
+            var imageupload = document.getElementsByClassName("imageupload");
+
+
+            if (files.length != 0) {
+                files[files.length - 1].remove();
+            }
+
+            if (imageupload.length != 0) {
+                imageupload[files.length - 1].remove();
+            }
+
+
+
+
+        });
+
+
+
+        $('#NewImg').click(function () {
+
+
+
+            var el = document.createElement('input');
+
+            el.setAttribute("type", "file");
+            el.setAttribute("name", "images");
+            el.setAttribute("accept", "image/*");
+            el.setAttribute("class", "load");
+            el.setAttribute("onchange", "readURL(this)");
+
+            $('.imageList').append(el);
+
+
+        });
+
+
+
+
+
+        //.......image load
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+
+                var reader = new FileReader()
+
+                var img = document.createElement("img");
+
+
+                reader.readAsDataURL(input.files[0]);
+
+                reader.onload = function (e) {
+
+                    img.setAttribute('src', e.target.result);
+                    img.setAttribute("width", "100");
+                    img.setAttribute("height", "100");
+                    img.setAttribute("class", "imageupload");
+
+                    $(".imageselect").append(img);
+                }
+
+            }
+        }
+
+
+
+        getcity($('.ostan-select').val());
+
+
+        $('.ostan-select').change(function () {
+
+            getcity($(this).val());
+
+        })
+
+
+        function getcity(ostanid)
+        {
+            $.ajax
+            ({
+
+                url: "@Url.Action("GetCity", "banner",new {area = "AdminPanel" })",
+                data: { ostanid : ostanid},
+                dataType: "html",
+                type: "Get",
+
+
+                success: function (res) {
+
+                    $('.city').html(res)
+
+                }, error: function (er) {
+
+                    alert("خطایی رخ داده است" + er.message);
+                }
+
+
+            });
+        }
+
+
+    </script>
+}
+
+
+
+
+
+
+
+
+
+

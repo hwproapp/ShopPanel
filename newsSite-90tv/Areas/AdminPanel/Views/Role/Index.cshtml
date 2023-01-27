@@ -1,0 +1,55 @@
+﻿
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray; height:500px;">
+    <div class="panel col-md-8 col-md-offset-2" style="margin-bottom:15px; margin-top:15px;">
+
+        <div id="jstree">
+        </div>
+
+    </div>
+</div>
+
+<div class="row pull-left">
+    <div>
+        <a asp-controller="Role" asp-action="Create" style="margin-left:30px;" class="btn btn-success">افزودن اجزای جدید</a>
+    </div>
+</div>
+
+
+@section PanelScripts{ 
+<script type="text/javascript">
+    $(function () {
+        
+        $('#jstree').on("changed.jstree", function (data) {
+            alert('salam');
+                    var i, j;
+                    var postedItems = [];
+                    
+                    j = data.selected.length;
+                    for (i = 0; i < j; i++) {
+                        var id = data.selected[i];
+                        //Add the Node to thr Json Array
+                        postedItems.push({
+                            text: data.instance.get_node(data.selected[i]).text,
+                            id: id,
+                            //parents: data.node.parents[0]
+                            parent: data.node.parents[0]
+                        });
+                    }
+                    //Serialize the Json Array and save in HiddenField
+                    $('#selectedItems').val(JSON.stringify(postedItems));
+                }).jstree({
+                    "core": {
+                        "themes": {
+                            "variant": "large"
+                        },
+                        "data": @Html.Raw(ViewBag.Json)
+                        },
+                    "checkbox": {
+                        "keep_selected_style": false
+                    },
+                    "plugins": ["wholerow"]
+                });
+            });
+</script>
+}

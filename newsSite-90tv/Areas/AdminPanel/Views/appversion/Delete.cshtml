@@ -1,0 +1,43 @@
+﻿@model Appversion
+
+@{
+    Layout = null;
+}
+
+<form asp-controller="appversion" asp-action="Delete" method="post">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">حذف تنظیمات ورژن</h4>
+    </div>
+
+
+    <div class="modal-body form-horizontal">
+        آیا از حذف این مورد  مطمئن هستید؟
+
+
+        <br /> <br />
+
+        @if (Model.status == 1) // version run
+        {
+            <div class="alert alert-danger">
+                <span class="glyphicon glyphicon-info-sign"></span>
+                حذف این مورد ممکن باعث خطا در اپدیت اپلیکیشن شود
+                <br />
+                این ورژن از اپلیکیشن در حال استفاده است
+                <br />
+                برای حذف ابتدا ورژن جدید را مشخص کنید
+            </div>
+        }
+
+    </div>
+
+
+    <div class="modal-footer" style="text-align:left;">
+        <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+        <button class="btn btn-danger" type="submit" @if (Model.status == 1) { <text> disabled</text> }>
+            حذف
+        </button>
+    </div>
+
+</form>

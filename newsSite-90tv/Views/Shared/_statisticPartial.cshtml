@@ -1,0 +1,33 @@
+﻿@*@using newsSite90tv.PublicClass
+@using Microsoft.AspNetCore.Http
+
+@inject IHttpContextAccessor http
+@inject newsSite90tv.Models.UnitOfWork.IUnitOfWork _db
+
+
+@{ 
+    string remoteIpAddress = http.HttpContext.Connection.RemoteIpAddress.ToString();
+    string todayDate = DateAndTimeShamsi.DateShamsi().ToString();
+
+    var query = _db.VisitRepositoryUW.Get(v => v.IpAddress.Equals(remoteIpAddress) &&
+    v.DateTime.Equals(todayDate));
+
+    if (query.Count() == 0)
+    {
+        // امروز اولین بازدید است
+       VisitorHits hv = new VisitorHits();
+        hv.IpAddress = remoteIpAddress;
+        hv.DateTime = todayDate;
+        hv.VisitHit = 1;
+
+        _db.VisitRepositoryUW.Create(hv);
+        _db.save();
+
+    }
+    else
+    {
+        //کاربر امروز بازدید داشته است
+        _ivisit.IncreasVisit(remoteIpAddress, todayDate);
+    }
+
+}*@

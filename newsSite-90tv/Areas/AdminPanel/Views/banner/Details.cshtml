@@ -1,0 +1,190 @@
+﻿@model newsSite90tv.Models.ViewModels.BannerDetailsViewModel
+
+
+@using newsSite90tv.PublicClass;
+
+
+@using newsSite90tv.Models.UnitOfWork;
+
+@inject IUnitOfWork _context
+
+
+@{
+    Layout = null;
+}
+
+
+<style>
+
+    .img-circle {
+        width: 100px;
+        height: 100px;
+        border: 1px solid red;
+    }
+
+    table {
+        margin-top: 20px;
+    }
+
+ 
+   
+
+    .center{
+        text-align:center;
+       
+    }
+
+    .images
+    {
+        overflow: scroll;
+        height:300px;
+        width: 600px;
+        margin:auto;
+    }
+
+    .img-banner {
+        width: 200px;
+        height: 200px;
+    }
+
+    .center > img
+    {
+        display : inline-block;
+    }
+
+    .center > img :hover
+    {
+        transform:scale(2,2)
+    }
+   
+</style>
+
+
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">
+        جزییات اگهی شماره  # @Model.banner.Id
+    </h4>
+</div>
+<div class="modal-body form-horizontal">
+   
+        <div class="center">
+            <h5>اطلاعات آگهی دهنده</h5>
+            <hr />
+            <img src="~/upload/userAppimage/normalimage/@Model.banner.Tbl_UserApp.image" class="img-circle "  alt="@Model.banner.Tbl_UserApp.firstName"/>
+
+            <table class="table table-responsive text-center table-striped">
+                <thead>
+                    <tr style="font-size:15px; font-weight:600;" class="bg-info">
+
+                        <td>    @Html.DisplayNameFor(model => model.banner.Tbl_UserApp.firstName) </td>
+                        <td>    @Html.DisplayNameFor(model => model.banner.Tbl_UserApp.lastName)  </td>
+                        <td>    @Html.DisplayNameFor(model => model.banner.Tbl_UserApp.phone )    </td>
+                        <td>    @Html.DisplayNameFor(model => model.banner.Tbl_UserApp.gender)    </td>
+                        <td>    @Html.DisplayNameFor(model => model.banner.Tbl_UserApp.type)      </td>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.banner.Tbl_UserApp.firstName</td>
+                        <td>@Model.banner.Tbl_UserApp.lastName </td>
+                        <td>@Model.banner.Tbl_UserApp.phone</td>
+                        <td>
+                            @if (Model.banner.Tbl_UserApp.gender == 1)
+                            {
+                                <span>آقا</span>
+                            }
+                            else
+                            {
+                                <span>خانم</span>
+                            }
+                        </td>
+
+                        <td>
+                            @if (Model.banner.Tbl_UserApp.type == 1)
+                            {
+                                <span>فروشنده</span>
+                            }
+                            else
+                            {
+                                <span>عادی</span>
+                            }
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div>
+            <h5 class="center">اطلاعات اگهی</h5>
+            <hr />
+
+            <label>@Html.DisplayNameFor(m => m.banner.image)</label>
+            <div class="center">
+                <img src="~/upload/banners/normalimage/@Model.banner.image" class="img-thumbnail"  alt="@Model.banner.title" title="@Model.banner.title" />
+
+            </div>
+
+
+            <hr />
+            <label class="control-label">گالری تصاویر آگهی</label>
+            @if (Model.bannerimage != null && Model.bannerimage.Count() != 0)
+            {
+                <div class="center images">
+
+                    @foreach (var bannerImage in Model.bannerimage)
+                    {
+                        <img src="~/upload/banners/normalimage/@bannerImage.image" class="img-thumbnail img-banner" alt="@Model.banner.title" title="@Model.banner.title"  />
+                    }
+
+                </div>
+
+
+            }
+
+
+            <label>@Html.DisplayNameFor(m => m.banner.title)</label>
+            <p>
+                @Model.banner.title
+            </p>
+
+
+            <hr />
+
+            <label>@Html.DisplayNameFor(m => m.banner.category_id)</label>
+            <p>
+                @Model.banner.Tbl_Category.Title
+            </p>
+
+            <hr />
+
+            <label>@Html.DisplayNameFor(m => m.banner.desc)</label>
+
+            <p style="overflow:scroll">
+                @Model.banner.desc
+            </p>
+
+            <hr />
+
+            <label>@Html.DisplayNameFor(m => m.banner.viewcount)</label>
+            <p>
+                @Model.banner.viewcount
+            </p>
+            <hr />
+
+            <label>@Html.DisplayNameFor(m => m.banner.status)</label>
+            <p>
+                @Model.banner.status.checkStatus()
+            </p>
+
+        </div>
+  
+
+    <div class="modal-footer" style="text-align:left;">
+        <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+    </div>
+
+</div>

@@ -1,0 +1,56 @@
+﻿@model newsSite90tv.Models.ViewModels.PropertiesCreateViewModel
+
+@{
+    Layout = null;
+}
+
+<style>
+    form {
+        padding: 10px;
+    }
+
+    .circleInput {
+        border-radius: 3px;
+    }
+</style>
+
+<form asp-controller="Properties" asp-action="Edit" method="post">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">ویرایش خصوصیت</h4>
+    </div>
+
+    <input type="hidden" asp-for="properties.Id"/>
+
+    <input type="hidden" asp-for="properties.isEnable"/>
+
+    <div class="modal-body form-horizontal">
+
+        <div class="form-group">
+            <label asp-for="properties.name" class="control-label"></label>
+            <input asp-for="properties.name" class="form-control circleInput" required />
+        </div>
+
+
+
+        <div class="form-group">
+            <label asp-for="properties.category_id" class="control-label"></label>
+            <select asp-for="properties.category_id" asp-items="@(new SelectList(Model.categories,"Id","Title"))" class="form-control circleInput"></select>
+        </div>
+
+
+
+    </div>
+
+
+    <div class="modal-footer" style="text-align:left;">
+        <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+        <button class="btn btn-success" type="submit">
+            ویرایش
+        </button>
+    </div>
+
+</form>
+
+

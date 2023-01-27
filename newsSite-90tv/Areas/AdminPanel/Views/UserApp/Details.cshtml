@@ -1,0 +1,130 @@
+﻿@model UserApp
+
+@using newsSite90tv.PublicClass
+
+@{
+    Layout = null;
+}
+
+
+<style>
+    .profile {
+        text-align: center;
+        margin-bottom: 10px;
+        padding:5px;
+        background-color:#c0faea;
+        border-radius:10px;
+    }
+        .profile p {
+            margin-top:5px;
+        }
+
+        .profile img {
+            box-shadow: 3px 3px 3px 3px #808080;
+            width: 150px;
+            height: 150px;
+        }
+</style>
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">جزییات</h4>
+</div>
+
+<div class="modal-body form-horizontal">
+
+
+
+    <div class="profile">
+        @if (!string.IsNullOrEmpty(Model.image))
+        {
+            <img src="~/upload/userAppimage/normalimage/@Model.image" class="img-circle" alt="@Model.lastName" />
+        }
+        else
+        {
+            <img src="~/upload/userimage/normalimage/defaultuserImage.png" class="img-circle" alt="@Model.lastName" />
+        }
+
+        <p>
+            @Model.firstName @Model.lastName
+        </p>
+    </div>
+    <ul class="list-group">
+
+        <li class="list-group-item">
+            <label asp-for="lastName"></label>
+            @Model.lastName
+        </li>
+
+
+        <li class="list-group-item">
+            <label asp-for="mobile"></label>
+            @Model.mobile
+        </li>
+
+
+
+        @if (!string.IsNullOrEmpty(Model.phone))
+        {
+            <li class="list-group-item">
+                <label asp-for="phone"></label>
+                @Model.phone
+            </li>
+        }
+
+
+
+
+        @if (!string.IsNullOrEmpty(Model.birthdate))
+        {
+
+            <li class="list-group-item">
+                <label asp-for="birthdate"></label>
+                @Model.birthdate
+            </li>
+
+        }
+
+
+
+
+        @if (!string.IsNullOrEmpty(Model.email))
+        {
+            <li class="list-group-item">
+                <label asp-for="email"></label>
+                @Model.email
+            </li>
+        }
+
+
+        <li class="list-group-item">
+            <label asp-for="type"></label>
+            @if (Model.type == 0)
+            {
+                <b class="text-info">کاربر عادی</b>
+            }
+            else
+            {
+                <b class="text-info">کاربر فروشنده</b>
+            }
+        </li>
+
+
+        <li class="list-group-item">
+            <label asp-for="mobileActiveStatus"></label>
+            @if (Model.mobileActiveStatus)
+            {
+                <b class="text-success">تایید شده</b>
+            }
+            else
+            {
+                <b class="text-info">تایید نشده</b>
+            }
+        </li>
+    </ul>
+
+
+
+    <div class="modal-footer" style="text-align:left;">
+        <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+    </div>
+</div>

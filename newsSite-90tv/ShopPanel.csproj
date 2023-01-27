@@ -1,0 +1,106 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <UserSecretsId> </UserSecretsId>
+    <AssemblyName>ShopPanel</AssemblyName>
+    <RootNamespace>ShopPanel</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>5</WarningLevel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\adminpanelfiles\bower_components\**" />
+    <Content Remove="wwwroot\adminpanelfiles\bower_components\**" />
+    <EmbeddedResource Remove="wwwroot\adminpanelfiles\bower_components\**" />
+    <None Remove="wwwroot\adminpanelfiles\bower_components\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20201128184124_mig1.cs" />
+    <Compile Remove="Migrations\20210106092954_mig17.cs" />
+    <Compile Remove="Migrations\20210114062034_mig19.cs" />
+    <Compile Remove="Migrations\20210114081336_mig21.cs" />
+    <Compile Remove="Migrations\20210114083448_mig22.cs" />
+    <Compile Remove="Migrations\20210217140219_mig36.cs" />
+    <Compile Remove="Migrations\20210217140219_mig36.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CoreCompat.System.Drawing" Version="1.0.0-beta006" />
+    <PackageReference Include="Imageflow.NativeRuntime.win-x86_64" Version="1.0.0-rc14" />
+    <PackageReference Include="Imageflow.Net" Version="0.2.6" />
+    <PackageReference Include="KavenegarDotNetCore" Version="1.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.4" />
+    <PackageReference Include="Syncfusion.Pdf.Net.Core" Version="18.4.0.31" />
+    <PackageReference Include="Syncfusion.XlsIO.Net.Core" Version="18.3.0.40" />
+    <PackageReference Include="ZarinPalSandbox" Version="2.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\AdminPanel\Data\" />
+    <Folder Include="Areas\AdminPanel\Models\" />
+    <Folder Include="wwwroot\upload\gallaryUp\thumbnailimage\" />
+    <Folder Include="wwwroot\upload\userimage\thumbnailimage\" />
+    <Folder Include="wwwroot\upload\userimage\normalimage\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Areas\AdminPanel\Views\Advertising\_searchBox.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\AdminPanel\Views\buy\Index.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\AdminPanel\Views\Properties\Create.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\AdminPanel\Views\Properties\Delete.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\AdminPanel\Views\Properties\Edit.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\AdminPanel\Views\Properties\Index.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\AdminPanel\Views\ReportShop\Index.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\AdminPanel\Views\Saller\Create.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\AdminPanel\Views\Saller\Edit.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\AdminPanel\Views\UserApp\_searchBox.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="wwwroot\upload\banners\thumbnailimage\nopicture.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\upload\category\normalimage\nopicture.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\upload\gallaryUp\normalimage\nopicture.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\upload\products\normalimage\nopicture.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\upload\products\thumbnailimage\nopicture.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\upload\shop\thumbnailimage\72b65b54a7a74fc89fecad178e33de1c.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

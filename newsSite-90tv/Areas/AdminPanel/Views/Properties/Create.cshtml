@@ -1,0 +1,69 @@
+﻿@model newsSite90tv.Models.ViewModels.PropertiesCreateViewModel
+
+@{
+    Layout = null;
+}
+
+<style>
+    form{
+        padding:10px;
+    }
+
+    .circleInput {
+        border-radius: 3px;
+    }
+
+  
+</style>
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-@TempData["type"]">
+        <span class="close" data-dismiss="alert">
+           &times;
+        </span>
+        @TempData["message"]
+    </div>
+}
+
+<form asp-controller="Properties" asp-action="Create" method="post">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"> خصوصیت جدید</h4>
+    </div>
+
+    <div class="modal-body form-horizontal">
+
+        <div class="form-group">
+            <label asp-for="properties.name" class="control-label"></label>
+            <input asp-for="properties.name" class="form-control circleInput" required />
+        </div>
+
+
+
+
+        <div class="form-group">
+            <label asp-for="properties.category_id" class="control-label"></label>
+            <select asp-for="properties.category_id" asp-items="@(new SelectList(Model.categories,"Id","Title"))" class="form-control circleInput"></select>
+        </div>
+
+      
+
+
+
+    </div>
+
+
+    <div class="modal-footer" style="text-align:left;">
+
+        <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+        <button class="btn btn-success" type="submit">
+           ایجاد
+        </button>
+
+    </div>
+
+</form>
+
+

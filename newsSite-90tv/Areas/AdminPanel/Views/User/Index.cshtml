@@ -1,0 +1,116 @@
+﻿@model IEnumerable<newsSite90tv.Models.ApplicationUsers>
+@using newsSite90tv.PublicClass
+
+
+@{
+
+    ViewData["Title"] = "کاربران سیستم";
+
+} 
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-@TempData["type"]">
+        <span class="close" data-dismiss="alert">&times;</span>
+        @TempData["message"]
+    </div>
+}
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="panel panel-primary col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+
+        <div class="panel-body">
+            <div>
+                <a class="btn btn-primary" asp-controller="User" asp-action="Create">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    افزودن کاربر
+                </a>
+            </div>
+        </div>
+
+        <hr style="height:1px; background-color:gray;" />
+
+        <div class="box box-body table-responsive no-padding">
+
+            <table class="table table-responsive text-center">
+                <thead>
+                    <tr style="font-size:15px; font-weight:600;">
+                        <td>@Html.DisplayNameFor(model => model.FirstName)</td>
+                        <td>@Html.DisplayNameFor(model => model.LastName)</td>
+                        <td>@Html.DisplayNameFor(model => model.PhoneNumber)</td>
+                        <td>@Html.DisplayNameFor(model => model.gender)</td>
+                        <td>@Html.DisplayNameFor(model => model.UserImagePath)</td>
+                        <td>عملیات</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.FirstName</td>
+                            <td>@item.LastName</td>
+                            <td>@item.PhoneNumber</td>
+
+                            @if (item.gender == 1)
+                            {
+                                <td>آقا</td>
+                            }
+                            else
+                            {
+                                <td>خانم</td>
+                            }
+
+
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.UserImagePath))
+                                {
+                                    <img src="~/upload/userimage/thumbnailimage/@item.UserImagePath" class="img-circle" alt="@item.FirstName @item.LastName" width="100px" height="100px" />
+                                }
+                                else
+                                {
+                                    <img src="~/upload/userimage/thumbnailimage/defaultuserImage.png" class="img-circle" alt="@item.FirstName @item.LastName" width="100px" height="100px" />
+                                }
+                            </td>
+
+
+
+                            <td>
+
+                                <a class="btn btn-warning" asp-controller="Role" asp-action="AccessRight" asp-route-id="@item.Id">
+                                    <i class="glyphicon glyphicon-grain"></i>
+                                    دسترسی
+                                </a>
+                                <a class="btn btn-info" asp-controller="User" asp-action="Details" asp-route-id="@item.Id"
+                                   data-toggle="modal" data-target="#modal-action-all">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                    جزییات
+                                </a>
+
+                                <a class="btn btn-primary" asp-controller="User" asp-action="Edit" asp-route-id="@item.Id">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                    ویرایش
+                                </a>
+
+                                <a class="btn btn-danger" asp-controller="User" asp-action="Delete"
+                                   asp-route-id="@item.Id" data-toggle="modal" data-target="#modal-action-delete">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                    حذف
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-all", Size = ModalSize.Medium })
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-delete", Size = ModalSize.Medium })
+
+
+@section PanelScripts{
+    <script src="~/js/modal-js/category-index.js"></script>
+}

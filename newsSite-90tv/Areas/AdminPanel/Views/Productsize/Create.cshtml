@@ -1,0 +1,115 @@
+﻿@model newsSite90tv.Models.ViewModels.ProductSizeViewModel
+
+
+@{
+    ViewData["Title"] = "افزودن سایز بندی محصول";
+
+}
+
+
+
+
+<style>
+    .circleInput {
+        border-radius: 3px;
+    }
+
+    .scroll {
+        overflow: scroll;
+        height: 250px;
+    }
+</style>
+
+
+
+@if (ViewBag.message != null)
+{
+    <div class="alert alert-@ViewBag.type">
+        <span class="close" data-dismiss="alert">&times;</span>
+        @ViewBag.message
+    </div>
+}
+
+<div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="col-md-8 col-md-offset-2" style="margin-bottom:15px; margin-top:15px;">
+        <form asp-area="AdminPanel" asp-controller="Productsize" asp-action="Create" method="post">
+
+
+            <input type="hidden" name="catid" id="catid" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+
+
+            <div class="form-group">
+                <label asp-for="size.name" class="control-label"></label>
+                <input asp-for="size.name" class="form-control circleInput" placeholder="نام اندازه  را وارد نمایید مثال : بزرگ " />
+                <span asp-validation-for="size.name" class="text-danger"></span>
+            </div>
+
+
+
+            @if (Model != null && Model.categories.Count() != 0)
+            {
+
+                <div class="form-group scroll">
+                    <label class="control-label">اندازه شما در چه دسته بندی قرار دارد. انتخاب کنید.</label>
+                    <ul class="list-group" id="category">
+                        @foreach (var category in Model.categories)
+                        {
+                            <li class="list-group-item">
+                                <input type="checkbox" value="@category.Id" />
+                                <text>@category.Title</text>
+                            </li>
+                        }
+
+                    </ul>
+                </div>
+
+            }
+
+
+
+            <div class="form-group">
+                <input type="submit" value="ایجاد" class="btn btn-success" />
+                <a asp-action="Index" class="btn btn-danger">بازگشت</a>
+            </div>
+
+
+
+        </form>
+
+    </div>
+
+
+</div>
+
+@section PanelScripts
+    {
+    <script>
+
+
+        var catid = [];
+
+        $("ul#category  li input[type='checkbox']").change(function () {
+            var id = $(this).val();
+
+            if ($(this).is(":checked")) {
+                catid.push(id)
+
+            } else {
+                let c = catid.indexOf(id);
+                catid.splice(c, 1);
+            }
+
+            $('#catid').val(JSON.stringify(catid));
+
+
+        });
+    </script>
+}
+
+
+
+

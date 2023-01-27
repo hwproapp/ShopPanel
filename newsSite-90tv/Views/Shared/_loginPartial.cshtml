@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Http
+
+@inject UserManager<ApplicationUsers> _userManager
+@inject IHttpContextAccessor _hc
+
+
+@{ 
+    //بدست آوردن اطلاعات کاربری که لاگین کرده در ویو
+    var user = await _userManager.GetUserAsync(_hc.HttpContext.User);
+}
+<div id="login" style="box-shadow:3px 3px 3px gray;margin-top:20px">
+    <form  asp-controller="Account" asp-action="LogOut" method="post">
+
+        <div class="text-center">کاربر گرامی  @user.FirstName @user.LastName خوش آمدید</div>
+        <hr style="height:1px; background-color:gray;" />
+
+        <div style="margin-top: 30px; margin-bottom:15px;text-align:center">
+            <a href="/AdminPanel/Home/Index" class="btn btn-primary">پنل کاربری</a>
+            <button type="submit" class="btn btn-danger">خروج از سیستم</button>
+        </div>
+
+    </form>
+</div>
+
+

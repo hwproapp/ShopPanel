@@ -1,0 +1,241 @@
+﻿
+@{
+    Layout = null;
+}
+
+<style>
+    #searchtyps {
+        width: 400px;
+        margin: auto;
+    }
+
+    select {
+        margin-top: 10px;
+    }
+</style>
+
+<form asp-controller="shop" asp-action="searchResult" method="get">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">جستجو فروشگاه</h4>
+    </div>
+
+    <div class="modal-body form-horizontal">
+
+
+
+        <div class="form-group">
+            <select class="form-control" name="order" id="searchtyps" >
+                <optgroup label=" نوع جستجو خود را انتحاب کنید"></optgroup>
+
+                <option value="0">
+                    براساس فروشگاه
+                </option>
+                <option value="1">
+                    براساس فروشنده
+                </option> 
+                
+                <option value="2">
+                    براساس استان
+                </option>
+
+            </select>
+
+
+        </div>
+
+        <div class="form-group target" style="width:400px;margin:auto" >
+            <input type="text" class="form-control" required name="q" placeholder="عنوان فروشگاه را وارد کنید" id="key" />
+        </div>
+
+    </div>
+
+
+    <div class="modal-footer" style="text-align:left;">
+        <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+        <button class="btn btn-success" type="submit">بگرد</button>
+    </div>
+</form>
+
+
+
+
+<script>
+
+    
+
+    $('#searchtyps').change(function () {
+
+
+        $('#key').removeAttr('placeholder');
+        var val = $(this).val();
+
+
+
+        if (val == 1) {
+            $('#key').attr("placeholder", "فامیلی فروشنده را وارد کنید");
+            ref();
+        }else if (val == 2) {
+            $('#key').attr("placeholder", " استان را وارد کنید");
+
+            if ($('.cityoption').length == 0 || $('.ostanoption') == 0)
+            {
+                getOstan();
+            }else
+            {
+                $('.cityoption').show();
+                $('.ostanoption').show();
+                $('#key').hide();
+            }
+            
+        } else if (val == 0) {
+            $('#key').attr("placeholder", "عنوان فروشگاه را وارد کنید");
+            ref();
+        }
+
+
+        function ref() {
+            $('.cityoption').hide();
+            $('.ostanoption').hide();
+            $('#key').show();
+            $('#key').val('');
+        }
+
+
+
+
+
+
+
+
+    })
+
+   
+
+    function getOstan() {
+
+
+        $.ajax({
+
+            url: "@Url.Action("getostan","shop",new { area = "AdminPanel"})",
+            type: "Post",
+            dataType: "json",
+
+
+            success: function (res) {
+
+                console.log(res);
+
+                var sel = document.createElement('select');
+               
+                sel.setAttribute("class", 'form-control ostanoption')
+                sel.setAttribute('onchange', "ostanchg()");
+                sel.setAttribute('onclick', "ostanchg()");
+               
+
+                for (var i = 0; i < res.length; i++) {
+                    let op = document.createElement('option');
+                    op.setAttribute('value', res[i].Id);
+                    op.innerHTML = res[i].title;
+
+
+
+                    sel.appendChild(op);
+                }
+
+
+                $('#key').hide();
+                $('.target').append(sel);
+
+            }, error: function (er) {
+
+                console.log(er.message);
+
+            }
+
+
+
+        })
+
+
+       
+    }
+
+
+    function getcity(ostid) {
+
+
+        $.ajax({
+
+            url: "@Url.Action("getcity", "shop",new { area = "AdminPanel"})",
+            data: {id : ostid},
+            type: "Post",
+            dataType: "json",
+
+
+            success: function (res) {
+
+               
+
+                var sel = document.createElement('select');
+                sel.setAttribute("class", 'form-control cityoption')
+                sel.setAttribute('onchange', "citychng()");
+                sel.setAttribute('onclick', "citychng()");
+               
+                for (var i = 0; i < res.length; i++) {
+                    let op = document.createElement('option');
+                    op.setAttribute('value', res[i].Id);
+                    op.innerHTML = res[i].title;
+                    sel.appendChild(op);
+                }
+
+               
+                $('.cityoption').remove();
+                $('.target').append(sel);
+
+               
+
+            }, error: function (er) {
+
+                console.log(er.message);
+
+            }
+
+
+
+        })
+
+
+       
+    }
+
+
+
+    var ost, ct;
+    function ostanchg() {
+
+       
+        let v = $('.ostanoption').val()
+
+        getcity(v);
+
+        ost = v;
+    }
+
+
+    function citychng() {
+        let v = $('.cityoption').val()
+
+        ct = v;
+
+
+        var key = ost + "," + ct;
+
+
+        console.log(key);
+        $('#key').val(key.toString());
+    }
+
+  
+  
+</script>

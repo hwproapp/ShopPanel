@@ -1,0 +1,40 @@
+﻿@model Part
+
+@{
+    Layout = null;
+}
+
+<style>
+    #name {
+        width: 300px;
+    }
+
+    .circleInput {
+        border-radius: 3px;
+    }
+</style>
+
+<form asp-controller="proppart" asp-action="Create" method="post">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"> بخش جدید</h4>
+    </div>
+
+    <div class="modal-body form-horizontal">
+
+        <div class="form-group">
+            <label asp-for="key" class="control-label"></label>
+            <input asp-for="key" class="form-control circleInput" required />
+        </div>
+
+    </div>
+
+
+    <div class="modal-footer" style="text-align:left;">
+        <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+        <button class="btn btn-success" type="submit">
+            ایجاد
+        </button>
+    </div>
+
+</form>

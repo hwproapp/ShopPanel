@@ -1,0 +1,246 @@
+﻿@model IEnumerable<Sell>
+
+
+
+@using newsSite90tv.PublicClass
+
+@using newsSite90tv.Models.UnitOfWork
+
+@inject IUnitOfWork _context
+
+@{
+    ViewData["Title"] = "فروش های تسویه نشده فروشنده ";
+
+    int row = 1;
+}
+
+
+<style>
+    #idximg {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+    }
+
+    .circleInput {
+        border-radius: 3px;
+    }
+</style>
+
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-@TempData["type"]">
+        <span class="close" data-dismiss="alert">
+            &times;
+        </span>
+
+        @TempData["message"]
+
+    </div>
+}
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="panel panel-primary col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+
+
+        <div class="panel-body">
+            <div>
+                @*<h5>مرتب سازی بر اساس</h5>
+                <select class="form-control" id="sort">
+
+                    <option id="all" value="4">همه</option>
+                    <option id="suspend" value="0" class="text-primary">معلق</option>
+                    <option id="selling" value="1" class="text-warning">در  حال فروش</option>
+                    <option id="success" value="2" class="text-success">موفق</option>
+                    <option id="fail" value="3" class="text-danger">ناموفق</option>
+
+                </select>*@
+
+
+             
+            </div>
+
+        </div>
+
+        <hr style="height:1px; background-color:gray;" />
+
+        @if (Model != null && Model.Count() != 0)
+        {
+
+
+            <div class="box box-body table-responsive no-padding">
+
+                <table class="table table-responsive text-center">
+                    <thead>
+                        <tr style="font-size:15px; font-weight:600;">
+                            <td>ردیف</td>
+                            <td>@Html.DisplayNameFor(model => model.buy_id)</td>
+                            <td>@Html.DisplayNameFor(model => model.product_id)</td>
+                            <td>@Html.DisplayNameFor(model => model.shop_id)</td>
+                            <td>@Html.DisplayNameFor(model => model.seller_id)</td>
+                            <td>@Html.DisplayNameFor(model => model.qty)</td>
+                            <td>@Html.DisplayNameFor(model => model.price)</td>
+                            <td>@Html.DisplayNameFor(model => model.totalsellprice)</td>
+                            <td class="text-success">@Html.DisplayNameFor(model => model.totalprice)</td>
+                            <td>@Html.DisplayNameFor(model => model.createdatesh)</td>
+                            <td>@Html.DisplayNameFor(model => model.sellstatus)</td>
+                          
+                            <td>عملیات</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Count() != 0)
+                        {
+                            @foreach (var item in Model)
+                            {
+
+
+                                var userseller = _context.userappRepositoryUW.GetById(item.Tbl_Salsman.appuser_id);
+
+                        <tr>
+                            <td>
+                                @(row++)
+                            </td>
+
+
+                            <td>
+                                <a class="btn btn-info" asp-controller="buy" asp-action="Details" asp-route-Id="@item.buy_id" data-toggle="modal" data-target="#modal-action-detail-buy">
+                                    <span class="glyphicon glyphicon-info-sign"></span>
+                                    جزییات خرید
+                                </a>
+                            </td>
+
+
+                            <td>
+                                @item.Tbl_Product.title
+                            </td>
+
+
+                            <td>
+                                @item.Tbl_Shop.title
+                            </td>
+
+                            <td>
+                                @userseller.firstName @userseller.lastName
+                            </td>
+
+                            <td>
+                                @item.qty  عدد
+                            </td>
+
+                            <td>
+                                @item.price.RialToToman().ToPrice() تومان
+                            </td>
+
+
+
+                            <td>
+                                @item.totalsellprice.RialToToman().ToPrice() تومان
+                            </td>
+
+                            <td class="text-bold">
+
+                                @item.totalprice.RialToToman().ToPrice() تومان
+                            </td>
+
+                            <td>
+                                @item.createdatesh
+                            </td>
+
+
+                            <td>
+                                @item.sellstatus.checksellStatus()
+                            </td>
+
+
+
+
+
+                            <td>
+
+
+                                <a class="btn btn-info" asp-controller="sell" asp-action="Details" asp-route-Id="@item.Id" data-toggle="modal" data-target="#modal-action-detail-sell">
+                                    <span class="glyphicon glyphicon-info-sign"></span>
+                                    جزییات فروش
+                                </a>
+
+
+                                <a class="btn btn-danger" asp-controller="sell" asp-action="Delete" asp-route-Id="@item.Id" data-toggle="modal" data-target="#modal-action-delete">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                    حذف
+                                </a>
+
+
+                            </td>
+                        </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info">
+                در حال حاضر فروشی وجود ندارد
+            </div>
+        }
+
+
+    </div>
+</div>
+
+
+
+
+
+@* Paging *@
+@if (ViewBag.PageCount > 1)
+{
+    <div class="row text-center">
+        <nav>
+            <ul class="pagination">
+                @if ((int)ViewBag.PageID > 1)
+                {
+                    @* Previous *@
+                    <li>
+                        <a asp-controller="sell" asp-action="SellerSellNotFix" asp-route-Page="@((int)ViewBag.PageID - 1)" asp-route-id="@ViewBag.id">
+                            <span>&laquo;</span>
+                        </a>
+                    </li>
+                }
+                @for (int i = 1; i <= (ViewBag.PageCount); i++)
+                {
+                    <li class="@(((int)ViewBag.PageID==i)?" active":"")">
+                        <a asp-controller="sell" asp-action="SellerSellNotFix" asp-route-page="@i" asp-route-id="@ViewBag.id">
+                            @i
+                            <span class="sr-only"></span>
+                        </a>
+                    </li>
+                }
+                @if ((int)ViewBag.PageID <= (int)ViewBag.PageCount - 1)
+                {
+                    @* Next *@
+                    <li>
+                        <a asp-controller="sell" asp-action="SellerSellNotFix" asp-route-Page="@((int)ViewBag.PageID + 1)" asp-route-id="@ViewBag.id">
+                            <span>&raquo;</span>
+                        </a>
+                    </li>
+
+                }
+            </ul>
+        </nav>
+    </div>
+
+}
+
+
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-detail-sell", Size = ModalSize.Large })
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-delete", Size = ModalSize.Large })
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-detail-buy", Size = ModalSize.Large })
+
+

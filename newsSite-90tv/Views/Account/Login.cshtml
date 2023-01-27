@@ -1,0 +1,108 @@
+﻿@model newsSite90tv.Models.ViewModels.LoginViewModel
+@using Microsoft.AspNetCore.Identity
+
+
+
+@inject SignInManager<ApplicationUsers> signInManager
+
+@{
+    ViewData["Title"] = "ورود";
+
+}
+
+@if (signInManager.IsSignedIn(User))
+{
+
+    @Html.Partial("_loginPartial")
+}
+else
+{
+    <form asp-controller="Account" asp-action="Login" style="margin-top:20px;box-shadow:3px 3px 3px gray;border-radius:20px;" method="post" asp-route-returnUrl="@ViewData["ReturnUrl"]" id="frmLogin">
+
+        <div id="login">
+            <span class="header-lastnews">فرم ورود به پنل</span>
+
+            <div class="hr"></div>
+            <div class="form-group">
+                <label asp-for="UserName" class="col-sm-4 control-label"></label>
+                <div class="col-sm-8">
+                    <input asp-for="UserName" class="form-control" id="txtusername" placeholder="نام کاربری">
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="Password" class="col-sm-4 control-label"></label>
+                <div class="col-sm-8">
+                    <input asp-for="Password" class="form-control" id="txtusername" placeholder="رمز عبور">
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-4 col-sm-10">
+                    <div class="checkbox">
+                        <label asp-for="RememberMe">
+                            <input asp-for="RememberMe" />
+                            @Html.DisplayNameFor(m => m.RememberMe)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <span id="spanerror" class="text-danger"></span>
+
+
+            <div class="row" style="width: 100%">
+
+                <div class="form-group pull-left ">
+                    <button type="submit" class="btn btn-success">ورود</button>
+                </div>
+
+            </div>
+        </div>
+    </form>
+}
+
+
+
+@section Scripts{
+
+    @* login *@
+    <script>
+        $('#frmLogin').submit(function (e) {
+            var form = $(this);
+            var url = form.attr('action');
+
+            $.ajax({
+                type: "Post",
+                url: url,
+                data: form.serialize(),
+
+                success: function (msg) {
+
+                    if (msg.status === 'success') {
+                        window.location.href = '/AdminPanel/User';
+                    }
+                    else if (msg.status === 'fail') {
+                        $('#spanerror').text('اطلاعات ورود اشتباه است');
+
+                    }
+                    else if (msg.status === 'fail2') {
+                        $('#spanerror').text('نام کاربری یا رمز عبور وارد نشده است')
+
+                    }
+                    else if (msg.status === 'fail3') {
+                        $('#spanerror').text('حساب شما مسدود یا حذف شده است')
+
+                    }
+
+                }
+            });
+
+            e.preventDefault();
+        });
+    </script>
+}
+

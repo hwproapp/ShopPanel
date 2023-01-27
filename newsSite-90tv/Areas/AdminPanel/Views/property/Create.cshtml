@@ -1,0 +1,59 @@
+﻿@model newsSite90tv.Models.ViewModels.PropertyCreateViewModel
+
+@{
+    Layout = null;
+}
+
+<style>
+    form{
+        padding:10px;
+    }
+
+    .circleInput {
+        border-radius: 3px;
+    }
+
+  
+</style>
+
+<form asp-controller="property" asp-action="Create" method="post">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"> خصوصیت جدید</h4>
+    </div>
+
+    <div class="modal-body form-horizontal">
+
+        <div class="form-group">
+            <label asp-for="property.name" class="control-label"></label>
+            <input asp-for="property.name" class="form-control circleInput" required />
+        </div>
+
+
+
+
+        <div class="form-group">
+            <label asp-for="property.part_id" class="control-label"></label>
+            <select asp-for="property.part_id" asp-items="@(new SelectList(Model.part,"Id","key"))" class="form-control circleInput"></select>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="property.cat_id" class="control-label"></label>
+            <select asp-for="property.cat_id" asp-items="@(new SelectList(Model.category,"Id","Title"))" class="form-control circleInput"></select>
+        </div>
+
+
+
+    </div>
+
+
+    <div class="modal-footer" style="text-align:left;">
+        <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+        <button class="btn btn-success" type="submit">
+           ایجاد
+        </button>
+    </div>
+
+</form>
+
+

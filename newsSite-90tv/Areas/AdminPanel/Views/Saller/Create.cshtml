@@ -1,0 +1,247 @@
+﻿@model UserApp
+
+
+
+<link href="~/persiandatepicker/jquery.Bootstrap-PersianDateTimePicker.css" rel="stylesheet" />
+
+<style>
+    .circleInput {
+        border-radius: 3px;
+    }
+</style>
+
+@if (ViewBag.message != null)
+{
+    <div class="alert alert-@ViewBag.type">
+        <span class="close" data-dismiss="alert">&times;</span>
+        @ViewBag.message
+    </div>
+}
+
+<div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;height:auto">
+    <div class="col-md-4 col-md-offset-2" style="margin-bottom:15px; margin-top:15px;">
+        <form asp-area="AdminPanel" asp-controller="Saller" asp-action="Create" method="post" id="frmuserapp" enctype="multipart/form-data">
+
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+            @* نام *@
+            <div class="form-group">
+                <label asp-for="firstName" class="control-label"></label>
+                <input asp-for="firstName" class="form-control circleInput" placeholder="نام را وارد نمایید" />
+                <span asp-validation-for="firstName" class="text-danger"></span>
+            </div>
+
+            @* نام خانوادگی *@
+            <div class="form-group">
+                <label asp-for="lastName" class="control-label"></label>
+                <input asp-for="lastName" class="form-control circleInput" placeholder="نام خاانوادگی را وارد نمایید" />
+                <span asp-validation-for="lastName" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="mobile" class="control-label"></label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-phone"></i>
+                    </div>
+                    <input asp-for="mobile" class="form-control circleInput" placeholder="شماره همراه را وارد نمایید" />
+                </div>
+                <span asp-validation-for="mobile" class="text-danger"></span>
+            </div>
+
+
+
+            <div class="form-group">
+                <label asp-for="phone" class="control-label"></label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-phone"></i>
+                    </div>
+                    <input asp-for="phone" class="form-control circleInput" placeholder="شماره تماس را وارد نمایید" />
+                </div>
+                <span asp-validation-for="phone" class="text-danger"></span>
+            </div>
+
+
+            @* ایمیل *@
+            <div class="form-group circleInput">
+                <label asp-for="email" class="control-label"></label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-inbox"></i>
+                    </div>
+                    <input asp-for="email" class="form-control" placeholder="ایمیل را وارد نمایید" />
+                </div>
+                <span asp-validation-for="email" class="text-danger"></span>
+            </div>
+
+            @* کد ملی *@
+            <div class="form-group circleInput">
+                <label asp-for="nationalcode" class="control-label"></label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-sort-numeric-asc"></i>
+                    </div>
+                    <input asp-for="nationalcode" class="form-control" placeholder="کد ملی را وارد نمایید" />
+                </div>
+                <span asp-validation-for="nationalcode" class="text-danger"></span>
+            </div>
+
+
+            @* تاریخ تولد *@
+            <div class="form-group">
+                <label asp-for="birthdate" class="control-label"></label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <input asp-for="birthdate" class="form-control circleInput"
+                           placeholder="تاریخ تولد را انتخاب نمایید" id="birthdaydate" name="birthdaydate"
+                           data-MdDateTimePicker="true" data-trigger="click" data-targetselector="#birthdaydate" data-groupid="group1"
+                           data-formdate="true" data-enabletimepicker="false" data-placement="bottom" />
+                </div>
+                <span asp-validation-for="birthdate" class="text-danger"></span>
+            </div>
+
+
+            @* جنسیت *@
+            <div class="form-group">
+                <label asp-for="gender" class="control-label"></label>
+                <select asp-for="gender" class="form-control circleInput">
+                    <option value="1">آقا</option>
+                    <option value="2">خانم</option>
+                </select>
+                <span asp-validation-for="gender" class="text-danger"></span>
+            </div>
+
+
+
+            @* تصویر *@
+            <div class="form-group">
+                <label asp-for="image" class="control-label"></label>
+                <div class="form-horizontal">
+                    <input asp-for="image" type="file" id="files" name="files" />
+                    <input type="button" onclick="UploadImage()" id="btnupload" class="btn btn-info" value="آپلود و نمایش تصویر" />
+                </div>
+                <span asp-validation-for="image" class="text-danger"></span>
+            </div>
+
+
+
+            <div class="form-group">
+                <input type="submit" value="ایجاد" class="btn btn-success" />
+                <a asp-action="Index" class="btn btn-danger back">بازگشت</a>
+            </div>
+
+            <input type="text" class="hidden" id="imagename" name="imagename" />
+
+        </form>
+
+
+    </div>
+
+    <div class="col-md-4" style="margin-top:25px; margin-bottom:25px;">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="box box-widget widget-user">
+                <div class="widget-user-header bg-light-blue-active text-center">
+                    <h3 class="widget-user-username">تصویر کاربر فروشنده</h3>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <img id="imguser" class="img-bordered col-md-12 col-xs-12 col-sm-12"
+                     src="~/upload/userimage/normalimage/defaultuserImage.png" alt="UserImage"
+                     style="height:300px;" />
+            </div>
+
+            <div id="divmessage" class="text-center hidden" style="color:green;">
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+
+@section PanelScripts{
+    <script src="~/persiandatepicker/calendar.js"></script>
+    <script src="~/persiandatepicker/jquery.Bootstrap-PersianDateTimePicker.js"></script>
+
+
+    <script>
+        var UploadImage = function ()
+        {
+
+                var data = new FormData;
+                var file = $("#files").get(0);
+                var files = file.files;
+
+                for (var i = 0; i < files.length; i++)
+                {
+                    data.append('files', files[i]);
+                }
+
+             $.ajax
+                ({
+                    type: "post",
+                    url: '@Url.Action("UploadFile", "UserApp", new { area = "AdminPanel"})',
+                    data: data,
+                    contentType: false,
+                    processData: false,
+                 }).done(function (result)
+                    {
+                        if (result.status == "success")
+                        {
+
+                            $("#imguser").attr('src', "\\upload\\userAppimage\\normalimage\\" + result.imagename);
+
+                            $("#divmessage").removeClass('hidden');
+                            $("#divmessage").text("تصویر با موفقیت آپلود شد");
+
+                            $("#imagename").val(result.imagename);
+
+                            $('.back').attr('disabled', 'true');
+                        }
+                    }).fail(function (result)
+                        {
+                        if (result.status != "success")
+                        {
+                            $("#divmessage").removeClass('hidden');
+
+                            $("#divmessage").text("در هنگام آپلود مشکلی رخ داد");
+
+                        }
+                       });
+
+
+        }
+
+
+        $('#infomsg').hide();
+
+        $("#isseller").change(function () {
+
+
+
+            if ($(this).is(':checked')) {
+                $('#infomsg').slideDown();
+
+
+            } else {
+                $('#infomsg').slideUp();
+            }
+
+
+        })
+
+    </script>
+
+
+}

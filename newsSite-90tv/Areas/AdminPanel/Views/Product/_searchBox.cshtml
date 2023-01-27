@@ -1,0 +1,94 @@
+﻿
+@{
+    Layout = null;
+}
+
+<style>
+    #searchtyps {
+        width: 400px;
+        margin: auto;
+    }
+
+    select {
+        margin-top: 10px;
+    }
+</style>
+
+<form asp-controller="Product" asp-action="searchResult" method="get">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">جستجو محصول</h4>
+    </div>
+
+    <div class="modal-body form-horizontal">
+
+
+
+        <div class="form-group">
+            <select class="form-control" name="order" id="searchtyps">
+                <optgroup label=" نوع جستجو خود را انتحاب کنید"></optgroup>
+
+                <option value="0">
+                    براساس فروشگاه
+                </option>
+                <option value="1">
+                    براساس فروشنده
+                </option>
+                <option value="2">
+                    براساس دسته بندی
+                </option>
+                <option value="3">
+                    براساس عنوان محصول
+                </option>
+
+
+            </select>
+
+
+        </div>
+
+        <div class="form-group" style="width:400px;margin:auto">
+            <input type="text" class="form-control" required name="q" placeholder="عنوان فروشگاه را وارد کنید" id="key" />
+        </div>
+
+    </div>
+
+
+    <div class="modal-footer" style="text-align:left;">
+        <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+        <button class="btn btn-success" type="submit">بگرد</button>
+    </div>
+</form>
+
+
+
+
+<script>
+
+    $('#searchtyps').change(function () {
+
+
+        $('#key').removeAttr('placeholder');
+        var val = $(this).val();
+
+      
+
+        if (val == 1) {
+            $('#key').attr("placeholder", "فامیلی فروشنده را وارد کنید");
+        } else if (val == 3) {
+            $('#key').attr("placeholder", "عنوان محصول را وارد کنید");
+        } else if (val == 2) {
+            $('#key').attr("placeholder", " عنوان دسته بندی را وارد کنید");
+        } else if (val == 0) {
+            $('#key').attr("placeholder", "عنوان فروشگاه را وارد کنید");
+        }
+       
+           
+
+    
+       
+
+
+
+    })
+</script>

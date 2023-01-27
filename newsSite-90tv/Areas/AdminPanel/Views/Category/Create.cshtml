@@ -1,0 +1,251 @@
+﻿@model Category
+
+@using newsSite90tv.PublicClass
+
+@{
+    ViewData["Title"] = "افزودن دسته بندی";
+
+
+    List<Category> cats = ViewBag.cats;
+}
+
+
+
+
+<style>
+    .circleInput {
+        border-radius: 3px;
+    }
+</style>
+
+@if (ViewBag.message != null)
+{
+    <div class="alert alert-@ViewBag.alerttype">
+        <span class="close" data-dismiss="alert">&times;</span>
+        @ViewBag.message
+    </div>
+}
+
+<div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="col-md-4 col-md-offset-2" style="margin-bottom:15px; margin-top:15px;">
+        <form asp-area="AdminPanel" asp-controller="Category" asp-action="Create" method="post">
+
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control circleInput" placeholder="عنوان دسته را وارد نمایید" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="type" class="control-label"></label>
+                <select asp-for="type" class="form-control circleInput ct-types">
+
+                    <option value="0">
+                        محصولات
+                    </option>
+
+                    <option value="1">
+                        اشتغال
+                    </option>
+
+
+                    <option value="2">
+                        فروشگاه
+                    </option>
+
+                </select>
+            </div>
+
+
+
+            <div class="form-group parent-cat">
+                <label asp-for="ParentId" class="control-label"></label>
+                <select asp-for="ParentId" asp-items="@(new SelectList(cats,"Id","Title"))" class="form-control circleInput">
+                    <option value="0">
+                        ندارد
+                    </option>
+                </select>
+            </div>
+
+
+
+
+            @* تصویر *@
+
+            <div class="form-group">
+                <label asp-for="image" class="control-label"></label>
+                <div class="form-horizontal">
+                    <input asp-for="image" type="file" id="files" name="files" />
+                    <input type="button" onclick="UploadImage()" id="btnupload" class="btn btn-info" value="آپلود و نمایش تصویر" />
+                </div>
+                <span asp-validation-for="image" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <input type="submit" value="ایجاد" class="btn btn-success" />
+                <a asp-action="Index" class="btn btn-danger">بازگشت</a>
+            </div>
+
+            <input type="text" class="hidden" id="imagename" name="imagename" />
+
+        </form>
+
+    </div>
+
+
+    <div class="col-md-4" style="margin-top:25px; margin-bottom:25px;">
+
+        <div class="col-md-10 col-md-offset-1">
+
+            <div class="box box-widget widget-user">
+                <div class="widget-user-header bg-light-blue-active text-center">
+                    <h3 class="widget-user-username">تصویر دسته بندی</h3>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <img id="imguser" class="img-bordered col-md-12 col-xs-12 col-sm-12"
+                     src="~/upload/category/normalimage/nopicture.png" alt="UsserImage"
+                     style="height:300px;" />
+            </div>
+
+        </div>
+    </div>
+
+
+
+</div>
+
+@section PanelScripts
+{
+    <script>
+
+    var UploadImage = function ()
+    {
+            var data = new FormData;
+            var file = $("#files").get(0);
+            var files = file.files;
+
+            for (var i = 0; i < files.length; i++) {
+                data.append('files', files[i]);
+            }
+
+          $.ajax({
+            
+                type: "post",
+                url: '@Url.Action("UploadFile","category", new { area = "AdminPanel"})',
+                data: data,
+                contentType: false,
+                processData: false,
+
+            }).done(function (result) {
+                if (result.status == "success") {
+
+                    $("#imguser").attr('src', "\\upload\\category\\normalimage\\" + result.imagename);
+
+                    $("#divmessage").removeClass('hidden');
+                    $("#divmessage").text("تصویر با موفقیت آپلود شد");
+
+                    $("#imagename").val(result.imagename);
+                    }
+                }).fail(function (result) {
+                    if (result.status != "success") {
+                        $("#divmessage").removeClass('hidden');
+                        $("#divmessage").text("در هنگام آپلود مشکلی رخ داد");
+
+                    }
+                });
+
+        }
+
+
+        $('.ct-types').change(function () {
+            
+
+            var ch = $(this).val();
+            
+
+            switch (parseInt(ch)) {
+                case 2: // select shop and job cat hide sub cat
+                case 1:
+                    $('.parent-cat').slideUp();
+                    break;
+                case 0: // product cat show subcats
+                    $('.parent-cat').slideDown();
+                    break;
+                default:
+                    break;
+            }
+        });
+
+
+
+
+            @*function cattypeReq(m) {
+
+
+
+            $.ajax({
+
+            url:"@Url.Action("categoryTypes", "Category", new { area = "AdminPanel" })",
+            data: { mode: m },
+            type: "Post",
+            datatype: "json",
+
+            success: function (res) {
+
+                var data = JSON.parse(res);
+
+              
+
+                var sel = document.createElement('select');
+                sel.setAttribute("name", "ParentId");
+
+                let op = document.createElement('option');
+                op.setAttribute('value', "0");
+                op.innerHTML = "ندارد";
+                sel.appendChild(op);
+
+                sel.setAttribute("class", 'form-control')
+
+                for (var i = 0; i < data.length; i++) {
+                    let op = document.createElement('option');
+                    op.setAttribute('value', data[i].Id);
+                    op.innerHTML = data[i].Title;
+
+
+
+                    sel.appendChild(op);
+                }
+
+                $('.parent-cat select').remove();
+                $('.parent-cat').append(sel);
+
+            }, error: function (er) {
+                console.log(er.message);
+            }
+
+            })
+
+            }
+
+        })*@
+
+
+        
+
+    </script>
+
+
+}
+
+
+
+
+

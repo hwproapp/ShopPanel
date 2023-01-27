@@ -1,0 +1,135 @@
+﻿@inject newsSite90tv.Models.UnitOfWork.IUnitOfWork Context
+
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Http
+
+@inject UserManager<ApplicationUsers> _userManager
+@inject IHttpContextAccessor _hc
+
+
+
+@{
+    //بدست آوردن اطلاعات کاربری که لاگین کرده در ویو
+    var user = await _userManager.GetUserAsync(_hc.HttpContext.User);
+}
+
+
+
+<nav class="navbar navbar-static-top">
+    <!-- Sidebar toggle button-->
+    <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+        <span class="sr-only">Toggle navigation</span>
+    </a>
+
+
+    <!-- Delete This after download -->
+    @*  <a href="~/Account/LogOut" class="btn hidden-xs" style="margin:6px 100px;padding:9px 50px;background-color:#d61577;border-color:#ad0b5d;font-weight:bold;color:#FFF">خروج از پنل</a>*@
+
+    @*<form asp-controller="Account" asp-action="LogOut" method="post">
+            <button type="submit" class="btn hidden-xs" style="margin:6px 100px;padding:9px 50px;background-color:#d61577;border-color:#ad0b5d;font-weight:bold;color:#FFF">خروج از پنل</button>
+        </form>*@
+    <!-- End Delete-->
+
+
+
+    <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+
+            <!-- Notifications: style can be found in dropdown.less -->
+            <li class="dropdown notifications-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-bell-o"></i>
+                    <span class="label label-warning" style="padding:3px;"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="header"></li>
+                    <li>
+                        <!-- inner menu: contains the actual data -->
+                        <ul class="menu">
+
+                            @*@foreach (var item in cmList)
+                                {
+                                    <li>
+                                        <a href="#">
+
+
+                                            <i class="fa fa-user-circle"></i>
+                                            <span style="color:darkblue; font-size:12px;">
+                                                @item.FullName گفت
+                                            </span>
+                                            <br />
+                                            <i class="fa fa-comment-o"></i>
+                                            <span style="color:black; font-size:11px;">
+                                                @item.Message
+                                            </span>
+
+
+                                        </a>
+                                    </li>
+                                }*@
+
+
+                        </ul>
+                    </li>
+                    <li class="footer"><a asp-controller="Comment" asp-action="Index">نمایش همه</a></li>
+                </ul>
+            </li>
+
+            <!-- User Account: style can be found in dropdown.less -->
+            <li class="dropdown user user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <img src="~/upload/userimage/normalimage/defaultuserImage.png" class="user-image" alt="User Image">
+                     <b  class="hidden-xs">@user.FirstName @user.LastName</b>
+                </a>
+                <ul class="dropdown-menu">
+                    <!-- User image -->
+                    <li class="user-header">
+                        @if (string.IsNullOrEmpty(user.UserImagePath))
+                        {
+                            <img src="~/images/519bf20d.avatar.jpg" class="img-circle" alt="User Image">
+                        }
+                        else
+                        {
+                            <img src="~/upload/userimage/thumbnailimage/@user.UserImagePath" class="img-circle" alt="User Image">
+                        }
+                        <p>
+                            @user.FirstName @user.LastName
+                            <small>به پنل خوش آمدید</small>
+                        </p>
+                    </li>
+                    <!-- Menu Body -->
+                    <li class="user-body">
+                        @*<div class="row">
+                                <div class="col-xs-4 text-center">
+                                    <a href="#">صفحه من</a>
+                                </div>
+                                <div class="col-xs-4 text-center">
+                                    <a href="#">فروش</a>
+                                </div>
+                                <div class="col-xs-4 text-center">
+                                    <a href="#">دوستان</a>
+                                </div>
+                            </div>*@
+                        <!-- /.row -->
+                    </li>
+                    <!-- Menu Footer-->
+                    <li class="user-footer">
+                        <div class="pull-left">
+                            <a href="~/AdminPanel/User/Details/@user.Id"  data-toggle="modal" data-target="#modal-action-all" class="btn btn-default btn-flat">پروفایل</a>
+                        </div>
+                        <form action="~/Account/LogOut" method="post">
+                            <div class="pull-right">
+                                <button type="submit" class="btn btn-default btn-flat">خروج</button>
+                            </div>
+                        </form>
+
+                    </li>
+                </ul>
+            </li>
+            <!-- Control Sidebar Toggle Button -->
+            <li>
+                <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+            </li>
+        </ul>
+    </div>
+</nav>

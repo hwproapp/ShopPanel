@@ -1,0 +1,201 @@
+﻿@model IEnumerable<newsSite90tv.Models.shopadvertise>
+
+
+@using newsSite90tv.Models.UnitOfWork
+
+@inject IUnitOfWork _context
+
+@{
+    ViewData["Title"] = "تبلیغات فروشگاه";
+
+    int row = 1;
+}
+}
+
+@using newsSite90tv.PublicClass
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="panel panel-primary col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+
+        <div class="panel-body">
+            <div>
+                <a class="btn btn-primary" asp-controller="Advertising" asp-action="Create">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    درج تبليغ فروشگاه
+                </a>
+
+                @*<a class="btn btn-info pull-left" asp-controller="Advertising" asp-action="searchBox" data-target="#modal-action-all" data-toggle="modal">
+                    <i class="glyphicon glyphicon-search"></i>
+                    جستجو
+                </a>*@
+            </div>
+        </div>
+        <hr style="height:1px; background-color:gray;" />
+        <table class="table table-responsive text-center">
+            <thead>
+                <tr style="font-size:15px; font-weight:600;">
+                    <td>
+                        ردیف
+
+
+                    </td>
+
+                    <td>@Html.DisplayNameFor(model => model.shop_id)</td>
+                    <td>@Html.DisplayNameFor(model => model.image)</td>
+                    <td>@Html.DisplayNameFor(model => model.dateShamsi)</td>
+                    <td>@Html.DisplayNameFor(model => model.status)</td>
+
+
+                    <td>عمليات</td>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count() != 0)
+                {
+                    @foreach (var item in Model)
+                    {
+
+                     
+                        var shopname = _context.shopRepositoryUW.GetById(item.shop_id).title;
+
+                <tr>
+                    <td>
+                        @(row++)
+                        @if (string.IsNullOrEmpty(item.users_id))
+                        {
+
+                            <span class="fa fa-android text-success" title=" توسط اپلیکیشن"></span>
+                        }
+                        else
+                        {
+                            <i class="glyphicon glyphicon-globe text-primary" title="توسط پنل"></i>
+                        }
+                    </td>
+
+
+                    <td>
+                        @shopname
+                    </td>
+
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.image))
+                        {
+                            <img src="~/upload/advImage/@item.image" class="img-thumbnail" width="100px" height="100px" />
+                        }
+                        else
+                        {
+                            <img src="~/upload/advImage/advdefault.jpg" class="img-thumbnail" width="100px" height="100px" />
+                        }
+                    </td>
+
+                    <td>
+                        @item.dateShamsi
+                    </td>
+
+
+                    <td>
+                        @item.status.checkStatus()
+                    </td>
+
+
+
+                    <td>
+
+                        <a class="btn btn-sm btn-danger" asp-controller="Advertising" asp-action="Delete"  data-toggle="modal" data-target="#modal-action-all" asp-route-id="@item.Id">
+                            <i class="glyphicon glyphicon-trash"></i>
+                            حذف
+                        </a>
+
+
+                        <a class="btn btn-sm btn-info" asp-controller="Advertising" asp-action="Details" asp-route-id="@item.Id"
+                           data-toggle="modal" data-target="#modal-action-all">
+                            <i class="glyphicon glyphicon-info-sign"></i>
+                            جزییات
+                        </a>
+
+
+                        <a class="btn btn-sm btn-primary" asp-controller="Advertising" asp-action="Edit" asp-route-id="@item.Id">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                            ویرایش
+                        </a>
+
+
+
+
+                        @if (item.status == 0)
+                        {
+                            <a class="btn btn-sm btn-success" asp-controller="Advertising" asp-action="changeStatus"
+                              asp-route-id="@item.Id"  asp-route-state="1">
+                                <i class="glyphicon glyphicon-check"></i>
+                                تایید
+                            </a>
+
+                            <a class="btn btn-sm btn-danger" asp-controller="Advertising" asp-action="changeStatus"
+                               asp-route-id="@item.Id" asp-route-state="2">
+                                <i class="glyphicon glyphicon-erase"></i>
+                                رد کردن
+                            </a>
+
+                        }
+
+
+                    </td>
+                </tr>
+
+
+                    }
+                }
+
+            </tbody>
+        </table>
+
+
+        @* Paging *@
+        @if (ViewBag.PageCount > 1)
+        {
+            <div class="row text-center">
+                <nav>
+                    <ul class="pagination">
+                        @if ((int)ViewBag.PageID > 1)
+                        {
+                            @* Previous *@
+                            <li>
+                                <a asp-controller="Advertising" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID - 1)">
+                                    <span>&laquo;</span>
+                                </a>
+                            </li>
+                        }
+                        @for (int i = 1; i <= (ViewBag.PageCount); i++)
+                        {
+                            <li class="@(((int)ViewBag.PageID==i)?" active":"")">
+                                <a asp-controller="Advertising" asp-action="Index" asp-route-page="@i">
+                                    @i
+                                    <span class="sr-only"></span>
+                                </a>
+                            </li>
+                        }
+                        @if ((int)ViewBag.PageID <= (int)ViewBag.PageCount - 1)
+                        {
+                            @* Next *@
+                            <li>
+                                <a asp-controller="Advertising" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID + 1)">
+                                    <span>&raquo;</span>
+                                </a>
+                            </li>
+
+                        }
+                    </ul>
+                </nav>
+            </div>
+
+        }
+
+
+    </div>
+</div>
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-all", Size = ModalSize.Medium })
+
+@section PanelScripts{
+    <script src="~/js/modal-js/all-support-index.js"></script>
+}

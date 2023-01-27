@@ -1,0 +1,156 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Http
+
+@inject UserManager<ApplicationUsers> _userManager
+@inject IHttpContextAccessor _hc
+
+
+@{ 
+    //بدست آوردن اطلاعات کاربری که لاگین کرده در ویو
+    var user = await _userManager.GetUserAsync(_hc.HttpContext.User);
+}
+
+<aside class="main-sidebar">
+
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel">
+            <div class="pull-right image">
+                @if (string.IsNullOrEmpty(user.UserImagePath))
+                {
+                    <img src="~/images/519bf20d.avatar.jpg" class="img-circle" alt="User Image">
+                }else
+                {
+                    <img src="~/upload/userimage/thumbnailimage/@user.UserImagePath" class="img-circle" alt="User Image">
+                }
+
+            </div>
+            <div class="pull-right info">
+                <p>@user.FirstName @user.LastName</p>
+               
+                <!-- Status -->
+                <a href="#"><i class="fa fa-circle text-success"></i> آنلاین</a>
+            </div>
+        </div>
+
+        <!-- search form (Optional) -->
+        <form action="#" method="get" class="sidebar-form">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="جستجو">
+                <span class="input-group-btn">
+                    <button type="submit" name="search" id="search-btn" class="btn btn-flat">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
+            </div>
+        </form>
+        <!-- /.search form -->
+        <!-- Sidebar Menu -->
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">امکانات سیستم</li>
+            <li class="active"><a asp-controller="Home" asp-action="Index"><i class="fa fa-home"></i> <span>پیشخوان</span></a></li>
+            <li><a asp-controller="Category" asp-action="Index"><i class="fa fa-comment"></i> مدیریت دسته بندی</a></li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-link"></i> <span>مدیریت محصولات</span>
+                    <span class="pull-left-container">
+                        <i class="fa fa-angle-right pull-left"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a asp-controller="Product" asp-action="Index"> محصولات</a></li>
+                  
+                    <li><a asp-controller="color" asp-action="Index"> رنگ بندی ها</a></li>
+                    <li><a asp-controller="brand" asp-action="Index">برند ها </a></li>
+                    <li><a asp-controller="Productsize" asp-action="Index">سایز بندی ها </a></li>
+                    <li><a asp-controller="Properties" asp-action="Index">خصوصیات </a></li>
+                </ul>
+            </li>
+            <li><a asp-controller="Userapp" asp-action="Index"><i class="fa fa-adn"></i> <span>کاربران اپلیکیشن</span></a></li>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-link"></i> <span>مدیریت فروشندگان</span>
+                    <span class="pull-left-container">
+                        <i class="fa fa-angle-right pull-left"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a asp-controller="saller" asp-action="Index"> فروشندگان</a></li>
+                    <li><a asp-controller="sellerbankinfo" asp-action="Index">اطلاعات بانکی فروشندگان</a></li>
+
+                </ul>
+            </li>
+
+
+            <li><a asp-controller="shop" asp-action="Index"><i class="fa fa-shopping-bag"></i> <span>مدیریت فروشگاه</span></a></li>
+            @*<li><a asp-controller="banner" asp-action="Index"><i class="fa fa-users"></i> <span>آگهی ها</span></a></li>*@
+            <li><a asp-controller="plan" asp-action="Index"><i class="fa fa-asterisk"></i> <span>پلن  ها</span></a></li>
+            <li><a asp-controller="comment" asp-action="Index"><i class="fa fa-comment"></i> <span>نظرات کاربران</span> </a></li>
+            <li><a asp-controller="contact" asp-action="Index"><i class="fa fa-connectdevelop"></i> <span>ارتباط با ما</span> </a></li>
+
+
+
+            <li><a asp-controller="Advertising" asp-action="Index"><i class="fa fa-bell"></i> <span> تبلیغات</span></a></li>
+
+
+            <li><a asp-controller="ReportProduct" asp-action="Index"><i class="fa fa-bell"></i><span>گزارش تخلف</span></a></li>
+
+
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-link"></i> <span>مدیریت سفارشات</span>
+                    <span class="pull-left-container">
+                        <i class="fa fa-angle-right pull-left"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a asp-controller="order" asp-action="Index"> سفارشات</a></li>
+                    <li><a asp-controller="orderdetail" asp-action="Index">جزییات سفارشات</a></li>
+                </ul>
+            </li>
+
+
+            <li><a asp-controller="buy" asp-action="Index"><i class="fa fa-hand-scissors-o"></i> <span> خرید </span></a></li>
+            <li><a asp-controller="sell" asp-action="Index"><i class="fa fa-hand-scissors-o"></i> <span> فروش </span></a></li>
+
+            <li><a asp-controller="checkoutrequest" asp-action="Getrequest"><i class="fa fa-hand-scissors-o"></i> <span> درخواست تسویه </span></a></li>
+            <li><a asp-controller="checkout" asp-action="Index"><i class="fa fa-send-o"></i> <span>تسویه شده ها</span></a></li>
+            <li><a asp-controller="trans" asp-action="Index"><i class="fa fa-transgender-alt"></i> <span> تراکنش ها</span></a></li>
+
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-link"></i> <span>تنظیمات</span>
+                    <span class="pull-left-container">
+                        <i class="fa fa-angle-right pull-left"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a asp-controller="appSetting" asp-action="Index">اپلیکیشن</a></li>
+                    <li><a asp-controller="appversion" asp-action="Index">به روز رسانی </a></li>
+
+                </ul>
+            </li>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-link"></i> <span>مدیریت سیستم</span>
+                    <span class="pull-left-container">
+                        <i class="fa fa-angle-right pull-left"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a asp-controller="User" asp-action="Index">کاربران سیستم</a></li>
+                    <li><a asp-controller="Role" asp-action="Index">دسترسیها</a></li>
+
+                </ul>
+            </li>
+        </ul>
+        <!-- /.sidebar-menu -->
+    </section>
+    <!-- /.sidebar -->
+</aside>

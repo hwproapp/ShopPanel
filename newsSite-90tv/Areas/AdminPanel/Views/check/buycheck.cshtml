@@ -1,0 +1,131 @@
+﻿@model IEnumerable<Buycheck>
+
+
+@{
+    ViewData["Title"] = "مدیریت دسته بندی پیگری خرید";
+
+    int row = 1;
+}
+
+<style>
+    #idximg {
+        height: 100%;
+        width: 100%;
+    }
+</style>
+
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-@TempData["type"]">
+        <span class="close" data-dismiss="alert">&times;</span>
+
+        @TempData["message"]
+
+    </div>
+}
+
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="panel panel-primary col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+
+       
+
+        <hr style="height:1px; background-color:gray;" />
+
+        <div class="box box-body table-responsive no-padding">
+
+            <table class="table table-responsive text-center">
+                <thead>
+                    <tr style="font-size:15px; font-weight:600;">
+                        <td>ردیف</td>
+                       
+                        <td>@Html.DisplayNameFor(model => model.dateShamsi)</td>
+                        <td>عملیات</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+
+                        <tr>
+                            <td>
+                                @(row++)
+
+                            </td>
+
+
+                            <td>@item.dateShamsi</td>
+
+                            <td>
+
+                             
+                                <a class="btn btn-danger" asp-controller="Category" asp-action="Delete"
+                                   asp-route-id="@item.Id " data-toggle="modal" data-target="#modal-action-category">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                    حذف
+                                </a>
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+
+@* Paging *@
+@if (ViewBag.PageCount > 1)
+{
+    <div class="row text-center">
+        <nav>
+            <ul class="pagination">
+                @if ((int)ViewBag.PageID > 1)
+                {
+                    @* Previous *@
+                    <li>
+                        <a asp-controller="buycheck" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID - 1)">
+                            <span>&laquo;</span>
+                        </a>
+                    </li>
+                }
+                @for (int i = 1; i <= (ViewBag.PageCount); i++)
+                {
+                    <li class="@(((int)ViewBag.PageID==i)?" active":"")">
+                        <a asp-controller="buycheck" asp-action="Index" asp-route-page="@i">
+                            @i
+                            <span class="sr-only"></span>
+                        </a>
+                    </li>
+                }
+                @if ((int)ViewBag.PageID <= (int)ViewBag.PageCount - 1)
+                {
+                    @* Next *@
+                    <li>
+                        <a asp-controller="buycheck" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID + 1)">
+                            <span>&raquo;</span>
+                        </a>
+                    </li>
+
+                }
+            </ul>
+        </nav>
+    </div>
+
+}
+
+
+
+
+@section PanelScripts{
+
+    <script src="~/js/modal-js/category-index.js"></script>
+    <script src="~/js/modal-js/subcategory-index.js"></script>
+
+
+    
+}
+

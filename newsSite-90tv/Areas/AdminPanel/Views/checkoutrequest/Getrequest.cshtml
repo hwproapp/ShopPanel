@@ -1,0 +1,378 @@
+﻿@model IEnumerable<CheckoutRequest>
+
+@using newsSite90tv.Models.UnitOfWork
+
+
+@using newsSite90tv.PublicClass
+
+@{
+    ViewData["Title"] = "درخواست تسویه  حساب";
+
+    int row = 1;
+}
+
+@inject IUnitOfWork _context
+
+<style>
+  
+    .circleInput {
+        border-radius: 3px;
+    }
+
+
+  
+
+</style>
+
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-@TempData["type"]">
+        <span class="close" data-dismiss="alert">&times;</span>
+        @TempData["message"]
+    </div>
+}
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="panel panel-primary col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+
+        <div class="panel-body">
+
+            <div class="form-group">
+                <label>تعداد سطر انتخابی  برای تسویه را وارد کنید</label>
+
+                <input class="form-control circleInput row-number" name="t" type="number" min="1" placeholder="تعدا سطر انتخابی " />
+                <br />
+                <button type="button" class="btn btn-info btn-block" onclick="getrownumber()">
+                    <span class="glyphicon glyphicon-magnet"></span>
+                    اجرا
+                </button>
+
+            </div>
+
+          
+            <div class="form-group">
+                <form method="post" id="frmpayabank">
+
+                    <input type="hidden" name="id" id="payabank" />
+
+                    <button type="button" class="btn btn-warning  btn-block" onclick="getbankinfo()">
+                        <span class="glyphicon glyphicon-file"></span>
+                        دریافت اطلاعات بانکی بصورت نسخه پایا (Excel)
+                    </button>
+
+
+                </form>
+            </div>
+
+           
+
+            <div class="form-group">
+                <form asp-controller="checkout" asp-action="Newcheckout" id="frmcheckout" method="post">
+
+                    <input type="hidden" name="id" id="checkout" />
+
+                    <button type="button" id="checkoutbtn" class="btn btn-block btn-primary" disabled>
+                        <span class="glyphicon glyphicon-move"></span>
+                        تسویه
+                    </button>
+
+                </form>
+            </div>
+
+
+
+        </div>
+        <hr style="height:1px; background-color:gray;" />
+
+
+        @if (Model != null && Model.Count() != 0)
+        {
+            <div class="box box-body table-responsive no-padding">
+
+                <table class="table table-responsive text-center">
+                    <thead>
+                        <tr style="font-size:15px; font-weight:600;">
+
+                            <td class="text-warning" style="cursor:pointer" onclick="selectAll()">
+                                انتخاب همه
+                            </td>
+
+                            <td>ردیف</td>
+                           
+                            <td>@Html.DisplayNameFor(m => m.shop_id)</td>
+                            <td>@Html.DisplayNameFor(m => m.seller_id)</td>
+                            <td>@Html.DisplayNameFor(m => m.requestprice)</td>
+                            <td>@Html.DisplayNameFor(m => m.Tbl_sellerbank.owner)</td>
+                            <td>@Html.DisplayNameFor(m => m.Tbl_sellerbank.bankname)</td>
+                            <td>@Html.DisplayNameFor(m => m.Tbl_sellerbank.BankNom)</td>
+                            <td>@Html.DisplayNameFor(m => m.Tbl_sellerbank.shabNom)</td>
+                            <td>@Html.DisplayNameFor(m => m.dateShamsi)</td>
+                            @*<td>عملیات</td>*@
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            var userseller = _context.userappRepositoryUW.GetById(item.Tbl_Salsman.appuser_id);
+
+                        <tr>
+
+                            <td>
+                                <input type="checkbox" value="@item.Id" class="check-fix" />
+                            </td>
+
+                            <td>
+                                @(row++)
+                            </td>
+
+                            @*<td class="text-primary">
+                               
+                                #@item.Id
+                            </td>*@
+
+                            <td>
+                                <a class="btn btn-sm btn-info" asp-controller="shop" asp-action="Details" asp-route-id="@item.shop_id">
+                                    @item.Tbl_Shop.title
+                                </a>
+
+
+                               
+
+                            </td>
+                            <td>
+                             
+                                <a class="btn btn-sm btn-info" asp-controller="Saller" asp-action="Details" asp-route-id="@item.seller_id"
+                                   data-toggle="modal" data-target="#model-seller-details">
+                                      @userseller.firstName @userseller.lastName
+                                </a>
+
+                            </td>
+
+                            <td class="text-bold text-success">
+
+                                @item.requestprice.RialToToman().ToPrice() تومان
+                            </td>
+
+                            <td>
+                                @item.Tbl_sellerbank.owner
+                            </td>
+
+                            <td class="text-bold">
+                                @item.Tbl_sellerbank.bankname   
+                            </td>
+
+                            <td class="text-bold">
+                                @item.Tbl_sellerbank.BankNom
+                            </td>
+
+
+                            <td class="text-bold">
+                                @item.Tbl_sellerbank.shabNom
+                            </td>
+
+
+                            <td>
+                                @item.dateShamsi
+                            </td>
+                        </tr>
+                        }
+
+                      
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info">
+                موردی برای تسویه حساب وجود ندارد
+            </div>
+        }
+
+    </div>
+
+</div>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="MyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"> اطلاعات </h4>
+            </div>
+            <div class="modal-body" >
+               
+            </div>
+
+            <div class="modal-footer" style="text-align:left;">
+                <button class="btn btn-primary" type="button" data-dismiss="modal">برگشت</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Modal -->
+
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "model-seller-details", Size = ModalSize.Medium })
+
+
+@section PanelScripts{
+
+     <script src="~/js/modal-js/all-support-index.js"></script>
+
+
+    <script type="text/javascript">
+
+        var checkoutarr = [];
+
+     
+
+        function getbankinfo() {
+
+            if (checkoutarr.length != 0) {
+
+                var res = confirm("شما " + checkoutarr.length + " سطر انتخاب کردید ایا مطمئن هستید ؟");
+
+                if (res)
+                {
+                    $('#frmpayabank').attr("action", "@Url.Action("GetPayaBankInfo","checkoutrequest",new { area = "AdminPanel"})");
+                    $('#payabank').val(JSON.stringify(checkoutarr));
+                    $('#frmpayabank').submit();
+
+                }
+
+            } else {
+                ModalAlert(" سطری انتخاب شود");
+            }
+        }
+
+
+
+         // submit form
+
+        $('#checkoutbtn').click(function () {
+
+            if (checkoutarr.length != 0)
+            {
+                if (confirm("آیا برای تسویه  مطمئن هستید ؟") === true)
+                {
+                  
+                    $('#checkout').val(JSON.stringify(checkoutarr));
+                    $('#frmcheckout').submit();
+                    
+                }
+
+            } else {
+                ModalAlert(" سطری انتخاب شود");
+            }
+
+        });
+
+     
+
+        // checkbox change satte
+
+        var selectchecks = $('.check-fix');
+
+        for (var i = 0; i < selectchecks.length; i++) {
+            
+            selectchecks[i].onchange = function ()
+            {
+                var idsell = $(this).val();
+                let index = checkoutarr.indexOf(idsell);
+                if (index != -1) {
+
+                    checkoutarr.splice(index, 1);
+
+                } else {
+                    checkoutarr.push(idsell);
+                }
+
+                fillinput();
+                
+                //check arr sieze
+                if (checkoutarr.length != 0)
+                {
+                    $('#checkoutbtn').removeAttr("disabled");
+
+                } else {
+
+                    $('#checkoutbtn').attr("disabled", "disabled");
+                }
+
+            }
+        }
+
+
+
+
+        // select all btn click for select all
+      
+        var selectall = true;
+
+        function selectAll() {
+
+            var selectchecks = $('.check-fix');
+
+
+            if (selectall) {
+                for (var i = 0; i < selectchecks.length; i++)
+                {
+                    checkoutarr.push($(selectchecks[i]).val());
+                    $(selectchecks[i]).attr("checked", "checked");
+                }
+                fillinput();
+                selectall = false;
+
+                $('#checkoutbtn').removeAttr("disabled");
+
+            } else
+            {
+                for (var i = 0; i < selectchecks.length; i++) {
+                    $(selectchecks[i]).removeAttr("checked");
+                } 
+
+                checkoutarr = [];
+                selectall = true;
+                $('#checkoutbtn').attr("disabled", "true");
+                fillinput();
+            }
+
+
+           
+        
+        }
+
+
+        function fillinput() {
+              $('#checkout').val(JSON.stringify(checkoutarr));
+        }
+
+
+        function getrownumber() {
+
+            var rownumber = $('.row-number').val();
+            window.location.assign("/AdminPanel/Getrequest?t=" +rownumber);
+        }
+
+
+
+
+
+        function ModalAlert(msg) {
+            $('#MyModal').modal();
+            $('.modal-body').html(msg);
+        }
+
+    </script>
+
+
+}
+
+

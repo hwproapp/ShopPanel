@@ -1,0 +1,191 @@
+﻿@model IEnumerable<Salsman>
+
+@using newsSite90tv.PublicClass
+
+@using newsSite90tv.Models.UnitOfWork
+
+@inject IUnitOfWork _context
+
+@{
+    ViewData["Title"] = "جستجو فروشندگان ";
+
+    int row = 1;
+}
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="panel panel-primary col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+
+        <div class="panel-body">
+            @if (Model!= null && Model.Count() != 0)
+            {
+            <strong>
+                تعداد "@Model.Count()"  مورد  یافت شد
+            </strong>
+            }else
+            {
+                <div class="alert alert-info">
+                    فروشنده ای یافت نشد
+                </div>
+            }
+        </div>
+
+        <hr style="height:1px; background-color:gray;" />
+
+        <div class="box box-body table-responsive no-padding">
+
+            <table class="table table-responsive text-center">
+                <thead>
+                    <tr style="font-size:15px; font-weight:600;">
+                        <td>ردیف</td>
+                        <td>@Html.DisplayNameFor(model => model.Tbl_Userapp.firstName)</td>
+                        <td>@Html.DisplayNameFor(model => model.Tbl_Userapp.lastName)</td>
+                        <td>@Html.DisplayNameFor(model => model.Tbl_Userapp.phone)</td>
+                        <td>@Html.DisplayNameFor(model => model.dateShamsi)</td>
+                        <td>@Html.DisplayNameFor(model => model.status)</td>
+                        <td>@Html.DisplayNameFor(model => model.Tbl_Userapp.image)</td>
+                        <td>عملیات</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+
+
+
+                        var info = _context.userappRepositoryUW.GetById(item.appuser_id);
+                    <tr>
+                        <td>
+                            @(row++)
+                            @if (string.IsNullOrEmpty(item.user_id))
+                            {
+
+                                <span class="fa fa-android text-success" title=" توسط اپلیکیشن"></span>
+                            }
+                            else
+                            {
+                                <i class="glyphicon glyphicon-globe text-primary" title="توسط پنل"></i>
+                            }
+                        </td>
+
+                        <td>@info.firstName</td>
+                        <td>@info.lastName</td>
+                        <td>@info.phone</td>
+                        <td>@item.dateShamsi</td>
+                        <td>@item.status.checkStatus()</td>
+                        <td><img src="~/upload/saller/thumbnailimage/@info.image" class="img-responsive img-thumbnail" width="60" height="60" /></td>
+
+
+
+                        <td>
+                            <a class="btn btn-sm btn-primary" asp-controller="saller" asp-action="Edit" asp-route-id="@item.Id">
+                                <i class="glyphicon glyphicon-pencil"></i>
+                                ویرایش
+                            </a>
+
+                            <a class="btn btn-sm btn-info" asp-controller="saller" asp-action="Details" asp-route-id="@item.Id"
+                               data-toggle="modal" data-target="#modal-action-detail-userApp">
+                                <i class="glyphicon glyphicon-info-sign"></i>
+                                جزییات
+                            </a>
+
+
+                        
+                            @if (item.status ==(byte) Status.suspend)
+                            {
+                                <a class="btn btn-sm btn-success" asp-controller="Category" asp-action="Delete"
+                                   asp-route-id="@item.Id" data-toggle="modal" data-target="#modal-action-category">
+                                    <i class="glyphicon glyphicon-check"></i>
+                                    تایید
+                                </a>
+
+                                <a class="btn btn-sm btn-danger" asp-controller="Category" asp-action="Delete"
+                                   asp-route-id="@item.Id" data-toggle="modal" data-target="#modal-action-category">
+                                    <i class="glyphicon glyphicon-erase"></i>
+                                    رد کردن
+                                </a>
+
+                            }
+                            else if (item.status == (byte)Status.invalid)
+                            {
+                                <a class="btn btn-sm btn-success" asp-controller="Category" asp-action="Delete"
+                                   asp-route-id="@item.Id" data-toggle="modal" data-target="#modal-action-category">
+                                    <i class="glyphicon glyphicon-check"></i>
+                                    تایید
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-sm btn-danger" asp-controller="Category" asp-action="Delete"
+                                   asp-route-id="@item.Id" data-toggle="modal" data-target="#modal-action-category">
+                                    <i class="glyphicon glyphicon-erase"></i>
+                                    رد کردن
+                                </a>
+
+
+                            }
+
+
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+@* Paging *@
+@if (ViewBag.PageCount > 1)
+{
+    <div class="row text-center">
+        <nav>
+            <ul class="pagination">
+                @if ((int)ViewBag.PageID > 1)
+                {
+                    @* Previous *@
+                    <li>
+                        <a asp-controller="saller" asp-action="searchResult" asp-route-Page="@((int)ViewBag.PageID - 1)" asp-route-order="@ViewBag.order" asp-route-q="@ViewBag.q">
+                            <span>&laquo;</span>
+                        </a>
+                    </li>
+                }
+                @for (int i = 1; i <= (ViewBag.PageCount); i++)
+                {
+                    <li class="@(((int)ViewBag.PageID==i)?" active":"")">
+                        <a asp-controller="saller" asp-action="searchResult" asp-route-page="@i" asp-route-order="@ViewBag.order" asp-route-q="@ViewBag.q">
+                            @i
+                            <span class="sr-only"></span>
+                        </a>
+                    </li>
+                }
+                @if ((int)ViewBag.PageID <= (int)ViewBag.PageCount - 1)
+                {
+                    @* Next *@
+                    <li>
+                        <a asp-controller="saller" asp-action="searchResult" asp-route-Page="@((int)ViewBag.PageID + 1)" asp-route-order="@ViewBag.order" asp-route-q="@ViewBag.q">
+                            <span>&raquo;</span>
+                        </a>
+                    </li>
+
+                }
+            </ul>
+        </nav>
+    </div>
+
+}
+
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-detail-userApp", Size = ModalSize.Medium })
+
+@section PanelScripts{
+
+    <script src="~/js/modal-js/userApp-index.js"></script>
+
+}

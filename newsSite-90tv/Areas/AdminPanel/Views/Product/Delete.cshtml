@@ -1,0 +1,28 @@
+﻿@model Product
+
+@{
+    Layout = null;
+}
+
+<form asp-controller="Product" asp-action="Delete" method="post">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">حذف  محصول</h4>
+    </div>
+        
+    <div class="modal-body form-horizontal">
+        <img src="~/upload/products/thumbnailimage/@Model.image" class="img-thumbnail" width="100px" height="100px" alt="@Model.title" />
+
+
+        آیا از حذف  محصول "@Model.title" مطمئن هستید؟
+    </div>
+
+
+    <div class="modal-footer" style="text-align:left;">
+        <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+        <button class="btn btn-danger" type="submit">
+            حذف
+        </button>
+    </div>
+
+</form>

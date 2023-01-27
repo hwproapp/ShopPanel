@@ -1,0 +1,66 @@
+﻿
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray; height:500px;">
+    <div class="panel col-md-8 col-md-offset-2" style="margin-bottom:15px; margin-top:15px;">
+
+        <div id="jstree">
+        </div>
+
+    </div>
+</div>
+
+
+<form asp-controller="Role" asp-action="AccessRight" method="post">
+    <div class="row pull-left" style="margin-left:25px;">
+        <div>
+            <input type="hidden" name="userId" id="userId" value="@ViewBag.userId"/>
+            <input type="hidden" name="selectedItems" id="selectedItems" />
+            <input type="submit" value="ثبت دسترسی" class="btn btn-success" />
+            <a asp-controller="User" asp-action="Index" class="btn btn-danger">بازگشت</a>
+        </div>
+    </div>
+
+    <input class="hidden" value="@ViewBag.roleList" id="divrolelist"/>
+</form>
+
+
+
+@section PanelScripts{
+    <script type="text/javascript">
+    $(function () {
+
+        $('#jstree').on("changed.jstree", function (e,data) {
+                    var i, j;
+                    var postedItems = [];
+
+                    j = data.selected.length;
+                    for (i = 0; i < j; i++) {
+                        var id = data.selected[i];
+                        //Add the Node to thr Json Array
+                        postedItems.push({
+                            text: data.instance.get_node(data.selected[i]).text,
+                            id: id,
+                            //parents: data.node.parents[0]
+                            parent: data.node.parents[0]
+                        });
+                    }
+                    //Serialize the Json Array and save in HiddenField
+                    $('#selectedItems').val(JSON.stringify(postedItems));
+                }).jstree({
+                    "core": {
+                        "themes": {
+                            "variant": "large"
+                        },
+                        "data": @Html.Raw(ViewBag.Json)
+                        },
+                    "checkbox": {
+                        "keep_selected_style": false
+                    },
+                "plugins": ["wholerow", "checkbox"]
+            }).on('loaded.jstree', function () {
+                var mydiv = $('#divrolelist').val().split(",");
+                $('#jstree').jstree(true).select_node(mydiv);
+            });
+            });
+    </script>
+}

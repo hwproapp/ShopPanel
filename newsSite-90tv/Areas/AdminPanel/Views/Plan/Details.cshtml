@@ -1,0 +1,95 @@
+﻿@model Plan
+
+@using newsSite90tv.PublicClass
+
+@{
+    Layout = null;
+}
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">جزییات پلن</h4>
+</div>
+
+<div class="modal-body form-horizontal">
+
+    <ul class="list-group">
+
+        <li class="list-group-item">
+            <p>
+                <label asp-for="namefa"></label>
+                @Model.namefa
+            </p>
+        </li>
+
+
+        <li class="list-group-item">
+            <p>
+                <label asp-for="nameen"></label>
+                @Model.nameen
+            </p>
+        </li>
+
+
+        <li class="list-group-item">
+            <p>
+                <label asp-for="plantype"></label>
+                @if (Model.plantype == 0)
+                {
+                    <text> روزانه</text>
+                }
+                else if (Model.plantype == 1)
+                {
+                    <text> ماهانه</text>
+                }
+                else
+                {
+                    <text> سالانه</text>
+                }
+            </p>
+        </li>
+
+
+        <li class="list-group-item">
+            <p>
+                <label asp-for="count"></label>
+                @Model.count
+            </p>
+        </li>
+
+        <li class="list-group-item">
+            <p>
+                <label >قیمت</label>
+                @Model.price.RialToToman().ToPrice() تومان
+            </p>
+        </li>
+
+
+        @if (Model.offpercent != 0)
+        {
+            <li class="list-group-item">
+                <p>
+                    <label asp-for="offpercent"></label>
+                    @Model.offpercent
+                </p>
+            </li>
+        }
+
+
+        <li class="list-group-item">
+            <p>
+                <label asp-for="desc"></label>
+                @Model.desc
+            </p>
+        </li>
+    </ul>
+
+</div>
+
+
+
+
+
+<div class="modal-footer" style="text-align:left;">
+    <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+</div>

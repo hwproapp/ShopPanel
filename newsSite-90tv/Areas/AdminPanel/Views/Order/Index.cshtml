@@ -1,0 +1,220 @@
+﻿@model IEnumerable<Order>
+
+
+
+@using newsSite90tv.PublicClass
+
+@{
+    ViewData["Title"] = "سفارش ها ";
+
+    int row = 1;
+}
+
+
+<style>
+    #idximg {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+    }
+
+    .circleInput {
+        border-radius: 3px;
+    }
+</style>
+
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-@TempData["type"]">
+        <span class="close" data-dismiss="alert">
+            &times;
+        </span>
+
+        @TempData["message"]
+
+    </div>
+}
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="panel panel-primary col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+
+        <div class="panel-body">
+            <div>
+                <h5>مرتب سازی بر اساس</h5>
+                <select class="form-control" id="sort" >
+
+                    <option id="all"  value="2" >همه</option>
+                    <option id="pay" value="1" class="text-success">پرداخت شده / تکمیل شده</option>
+                    <option id="wait" value="0" class="text-danger"> در انتظار پرداخت / تکمیل نشده</option>
+                </select>
+            </div>
+
+        </div>
+
+        <hr style="height:1px; background-color:gray;" />
+
+        <div class="box box-body table-responsive no-padding">
+
+            <table class="table table-responsive text-center">
+                <thead>
+                    <tr style="font-size:15px; font-weight:600;">
+                        <td>ردیف</td>
+                        <td class="text-primary">@Html.DisplayNameFor(model => model.codeorder)</td>
+                        <td>@Html.DisplayNameFor(model => model.sumprice)</td>
+                        <td>@Html.DisplayNameFor(model => model.dateshamsi)</td>
+                        <td>@Html.DisplayNameFor(model => model.isfinish)</td>
+                        <td>عملیات</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count () != 0)
+                    {
+                        @foreach (var item in Model)
+                        {
+
+                            <tr>
+                                <td>
+                                    @(row++)
+                                </td>
+
+                                <td >
+                                    @item.codeorder
+                                </td>
+
+                                <td>
+                                    @item.sumprice.RialToToman().ToPrice() تومان
+                                </td>
+
+                                <td>
+                                    @item.dateshamsi
+                                </td>
+
+
+                                <td>
+                                    @if (item.isfinish)
+                                    {
+                                        <text>پرداخت شده</text>
+                                    }
+                                    else
+                                    {
+                                        <text>  در انتظار پرداخت</text>
+                                    }
+                                </td>
+
+
+                                <td>
+
+                                    <a class="btn btn-warning" asp-controller="orderdetail" asp-action="OrderDetails" asp-route-Id="@item.Id" asp-route-codeorder="@item.codeorder" data-toggle="modal" data-target="#modal-action-orderdetils">
+                                        <span class="glyphicon glyphicon-info-sign"></span>
+                                        جزییات  سفارش
+                                    </a>
+                                    <a class="btn btn-info" asp-controller="order" asp-action="Details" asp-route-Id="@item.Id" data-toggle="modal" data-target="#modal-action-details">
+                                        <span class="glyphicon glyphicon-info-sign"></span>
+                                        جزییات
+                                    </a>
+
+                                    <a class="btn btn-danger" asp-controller="order" asp-action="Delete" asp-route-Id="@item.Id" data-toggle="modal" data-target="#modal-action-delete">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                        حذف
+                                    </a>
+
+
+
+
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+@* Paging *@
+@if (ViewBag.PageCount > 1)
+{
+    <div class="row text-center">
+        <nav>
+            <ul class="pagination">
+                @if ((int)ViewBag.PageID > 1)
+                {
+                    @* Previous *@
+                    <li>
+                        <a asp-controller="order" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID - 1)" asp-route-q="@ViewBag.q">
+                            <span>&laquo;</span>
+                        </a>
+                    </li>
+                }
+                @for (int i = 1; i <= (ViewBag.PageCount); i++)
+                {
+                    <li class="@(((int)ViewBag.PageID==i)?" active":"")">
+                        <a asp-controller="order" asp-action="Index" asp-route-page="@i"   asp-route-q="@ViewBag.q">
+                            @i
+                            <span class="sr-only"></span>
+                        </a>
+                    </li>
+                }
+                @if ((int)ViewBag.PageID <= (int)ViewBag.PageCount - 1)
+                {
+                    @* Next *@
+                    <li>
+                        <a asp-controller="order" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID + 1)" asp-route-q="@ViewBag.q">
+                            <span>&raquo;</span>
+                        </a>
+                    </li>
+
+                }
+            </ul>
+        </nav>
+    </div>
+
+}
+
+
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-details", Size = ModalSize.Large })
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-delete", Size = ModalSize.Large })
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-orderdetils", Size = ModalSize.Large })
+
+
+@section PanelScripts
+{
+    <script>
+
+        let q = Number.parseInt(@ViewBag.q);
+
+        switch (q) {
+
+            case 0:
+                $('#wait').attr("selected", "selected")
+                break;
+            case 1:
+                $('#pay').attr("selected", "selected")
+                break;
+            case 2:
+                $('#all').attr("selected", "selected")
+                break;
+            default:
+        }
+       
+
+        
+
+        $('#sort').change(function () {
+
+            var value = $(this).val();
+            window.location.assign("/AdminPanel/order?page=1&q=" + value);
+            
+        });
+
+    </script>
+}
